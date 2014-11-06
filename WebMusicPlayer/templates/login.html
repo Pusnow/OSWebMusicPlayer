@@ -1,0 +1,55 @@
+{% extends "default_layout.html" %}
+{% block body %}
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>Web Music Player <small>Demo</small></h1>
+    <br>
+    <form class="form-inline" role="form">
+  <div class="form-group">
+    <label class="sr-only" for="exampleInputEmail2">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="exampleInputPassword2">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Log In</button>
+</form>
+  </div>
+</div>
+
+<div class ="container">
+<div class ="row">
+
+<div class ="col-xs-6 col-sm-4">
+<div class="panel panel-default ">
+  <div class="panel-heading">새로운 음악</div>
+  <div class="panel-body">
+    노래방달렷더니힘드네 - 이성재
+  </div>
+</div>
+</div>
+<div class ="col-xs-6 col-sm-4">
+<div class="panel panel-default">
+  <div class="panel-heading">오늘의 추천 음악</div>
+  <div class="panel-body">
+    컴실에 두명잇는데 무슨 여기서 연애질이여 - 이성원
+  </div>
+</div>
+</div>
+<div class ="col-xs-6 col-sm-4">
+<div class="panel panel-default">
+  <div class="panel-heading">음악 인기 순위</div>
+  <div class="panel-body">
+    he india me to SBTM! - 한승훈
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+{% endblock %}
