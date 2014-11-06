@@ -25,3 +25,22 @@ body { padding-top: 70px; }
   src: url("/static/fonts/glyphicons-halflings-regular.eot");
   src: url("/static/fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("/static/fonts/glyphicons-halflings-regular.woff") format("woff"), url("/static/fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("/static/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
 }
+
+
+
+
+.album {
+    display: inline-block;
+    padding: 15px;
+    padding-bottom: 5px;
+    width : 250px;
+    height: 300px;
+    vertical-align: top;
+}
+
+.test {
+	width : 190px;
+	height : 190px;
+	background-color: #00ff00;
+}
+
