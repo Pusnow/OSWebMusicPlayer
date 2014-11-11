@@ -2,129 +2,15 @@
 {% block body %}
 
 <div id="wrapper">
-    <div class>
+        {% for album in albumlist %}
         <div class="album">
             <div class = "test">
             </div>
-            <p>
-              노래방달렷더니힘드네 <br>이성재
+            <p class = "albumtext">
+              {{album.name}} <br>{{album.singer}}
             </p>
         </div>
-        <div class="album">
-            <div class = "test">
-            </div>
-            <p>
-               컴실에 두명잇는데 무슨 여기서 연애질이여 <br>이성원
-            </p>
-        </div>
-        <div class="album">
-            <div class = "test">
-            </div>
-            <p>
-               he india me to SBTM! <br> 한승훈
-            </p>
-        </div>
-        <div class="album">
-            <div class = "test">
-            </div>
-            <p>
-               dnjksdbjhsvfjkslk4
-            </p>
-        </div>
-        <div class="album">
-            <div class = "test">
-            </div>
-            <p>
-               dnjksdbjhsvfjkslk5
-            </p>
-        </div>
-        <div class="album">
-            <div class = "test">
-            </div>
-            <p>
-               dnjksdbjhsvfjkslk6
-            </p>
-        </div>
-        <div class="album">
-            <div class = "test">
-            </div>
-            <p>
-               dnjksdbjhsvfjkslk7
-            </p>
-        </div>
-        <div class="album">
-            <div class = "test">
-            </div>
-            <p>
-               dnjksdbjhsvfjkslk7
-            </p>
-        </div>
-        <div class="album">
-            <div class = "test">
-            </div>
-            <p>
-               dnjksdbjhsvfjkslk7
-            </p>
-        </div>
-        <div class="album">
-            <div class = "test">
-            </div>
-            <p>
-               dnjksdbjhsvfjkslk7
-            </p>
-        </div>
-        <div class="album">
-            <div class = "test">
-            </div>
-            <p>
-               dnjksdbjhsvfjkslk7
-            </p>
-        </div>
-        <div class="album">
-            <div class = "test">
-            </div>
-            <p>
-               dnjksdbjhsvfjkslk7
-            </p>
-        </div>
-        <div class="album">
-            <div class = "test">
-            </div>
-            <p>
-               dnjksdbjhsvfjkslk7
-            </p>
-        </div>
-        <div class="album">
-            <div class = "test">
-            </div>
-            <p>
-               dnjksdbjhsvfjkslk7
-            </p>
-        </div>
-        <div class="album">
-            <div class = "test">
-            </div>
-            <p>
-               dnjksdbjhsvfjkslk7
-            </p>
-        </div>
-        <div class="album">
-            <div class = "test">
-            </div>
-            <p>
-               dnjksdbjhsvfjkslk7
-            </p>
-        </div>
-        <div class="album">
-            <div class = "test">
-            </div>
-            <p>
-               dnjksdbjhsvfjkslk7
-            </p>
-        </div>
-
-
-   </div>
+        {% endfor %}
 </div>
 
 
