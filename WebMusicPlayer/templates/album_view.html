@@ -4,11 +4,65 @@
 <div id="wrapper">
         {% for album in albumlist %}
         <div class="album">
-            <div class = "test">
-            </div>
+        	<a href = "#{{album.name}}" data-toggle="modal">
+            <img class = "test" src ="{{ url_for('static', filename='img/album/testalbum.png') }}">
+            </img>
+            </a>
             <p class = "albumtext">
               {{album.name}} <br>{{album.singer}}
             </p>
+        </div>
+
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="{{album.name}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        	<div class="modal-dialog">
+        		<div class="modal-content">
+        			<div class="modal-header">
+        				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        				<h4 class="modal-title" id="myModalLabel">{{album.name}} - {{album.singer}}</h4>
+        			</div>
+        			<div class="modal-body">
+        				<img class = "test" src ="{{ url_for('static', filename='img/album/testalbum.png') }}">
+            			</img>
+           		 		<br>
+
+
+           		 		<table class="table table-striped">
+           		 			<thead>
+           		 			 <tr>
+           		 			<th>#</th>
+           		 			<th>제목</th>
+           		 			<th>가수</th>
+           		 			<th>시간</th>
+           		 			</tr>
+           		 			</thead>
+           		 			<tbody>
+           		 			<tr>
+           		 				<td>1</td>
+           		 				<td>끼이익끼이익</td>
+           		 				<td>이성원</td>
+           		 				<td>1:00</td>
+           		 			</tr>
+           		 			<tr>
+           		 				<td>2</td>
+           		 				<td>끼이익</td>
+           		 				<td>이성원</td>
+           		 				<td>1:10</td>
+           		 			</tr>
+           		 			<tr>
+           		 				<td>3</td>
+           		 				<td>끼익</td>
+           		 				<td>이성원</td>
+           		 				<td>2:00</td>
+           		 			</tr>
+           		 			</tbody>
+
+						</table>
+        			</div>
+        		</div>
+        	</div>
         </div>
         {% endfor %}
 </div>

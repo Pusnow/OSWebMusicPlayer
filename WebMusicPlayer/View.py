@@ -19,15 +19,15 @@ def index():
 @app.route('/main')
 def main():
 	albumlist1 = [
-	dict(name="test",singer="test1"),
-	dict(name="test",singer="test1"),
-	dict(name="test",singer="test1"),
-	dict(name="test",singer="test1"),
-	dict(name="test",singer="test1"),
-	dict(name="test",singer="test1"),
-	dict(name="test",singer="test1"),
-	dict(name="test",singer="test1"),
-	dict(name="test",singer="test1"),
-	dict(name="test",singer="test1")
+	dict(name=u"끼이익",singer=u"이성원"),
+	dict(name=u"test",singer=u"test1"),
+	dict(name=u"test",singer=u"test1"),
+	dict(name=u"test",singer=u"test1"),
+	dict(name=u"test",singer=u"test1"),
+	dict(name=u"test",singer=u"test1"),
+	dict(name=u"test",singer=u"test1"),
+	dict(name=u"test",singer=u"test1"),
+	dict(name=u"test",singer=u"test1"),
+	dict(name=u"test",singer=u"test1")
 	]
 	return render_template('album_view.html', albumlist=albumlist1)
