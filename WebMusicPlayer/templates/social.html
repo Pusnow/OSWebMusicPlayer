@@ -1,0 +1,47 @@
+{% extends "default_layout.html" %}
+{% block body %}
+
+<ul class="nav nav-pills" id = "mainnav">
+  <li role="presentation"><a href="{{url_for('main')}}">Album View</a></li>
+  <li role="presentation"><a href="{{url_for('list')}}">List View</a></li>
+  <li role="presentation" class="active"><a href="{{url_for('social')}}">Social Music</a></li>
+</ul>
+
+<br>
+
+<div class ="container">
+<div class="col-md-3"> 
+  <div class = "container profile">
+  <img src = "{{ url_for('static', filename='img/album/testalbum.png') }}">
+  <h2>{{user.name}}</h2>
+  </div>
+  <div class = "container">
+  <h3> 그룹 </h3>
+    <ul>
+  {%for group in user.grouplist%}
+    <li>{{group.name}}</li>
+  {%endfor%}
+    </ul>
+  </div>
+  
+</div>
+
+
+<div class="col-md-9">
+
+{%for feed in feedlist%}
+  <div class = "panel panel-default">
+    <div class="panel-heading">
+     {{feed.user}}    <a href ="#">같이 듣기 </a>
+    </div>
+    <div class="panel-body">
+    {{feed.text}}
+    </div>
+  </div>
+{% endfor %}
+
+
+</div>
+</div>
+
+{% endblock %}

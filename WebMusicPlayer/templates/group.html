@@ -1,0 +1,61 @@
+{% extends "default_layout.html" %}
+{% block body %}
+
+<ul class="nav nav-pills" id = "mainnav">
+  <li role="presentation"><a href="{{url_for('main')}}">Album View</a></li>
+  <li role="presentation"><a href="{{url_for('list')}}">List View</a></li>
+  <li role="presentation" class="active"><a href="{{url_for('social')}}">Social Music</a></li>
+</ul>
+
+<br>
+
+<div class ="container">
+<div class="col-md-3"> 
+  <div class = "container profile">
+  <img src = "{{ url_for('static', filename='img/album/testalbum.png') }}">
+  <h2>{{group.name}}</h2>
+  </div>
+  <div class = "container">
+  <h3> 주요 멤버 </h3>
+    <ul>
+  {%for member in group.memberlist%}
+    <li>{{member}}</li>
+  {%endfor%}
+    </ul>
+  </div>
+  
+</div>
+
+
+<div class="col-md-9">
+
+<h2>작품</h2>
+{% for album in albumlist %}
+        <div class="album">
+          <a href = "#{{album.name}}" data-toggle="modal">
+            <img class = "test" src ="{{ url_for('static', filename='img/album/testalbum.png') }}">
+            </img>
+            </a>
+            <p class = "albumtext">
+              {{album.name}} <br>{{album.singer}}
+            </p>
+        </div>
+{%endfor%}
+
+<h2>최근 활동</h2>
+
+{%for feed in feedlist%}
+  <div class = "panel panel-default">
+    <div class="panel-heading">
+     {{feed.user}}
+    </div>
+    <div class="panel-body">
+    {{feed.text}}
+    </div>
+  </div>
+{% endfor %}
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "default_layout.html" %}
+{% block body %}
+
+<ul class="nav nav-pills" id = "mainnav">
+  <li role="presentation"><a href="{{url_for('main')}}">Album View</a></li>
+  <li role="presentation" class="active"><a href="{{url_for('list')}}">List View</a></li>
+  <li role="presentation"><a href="{{url_for('social')}}">Social Music</a></li>
+</ul>
+
+<br>
+
+<div class = "container">
+<div class="col-md-2">
+<div class= "panel panel-default">
+<div class ="container">
+<h3> Playlist </h3>
+    <ul>
+  {%for list in playlist%}
+    <li>{{list.name}}</li>
+  {%endfor%}
+    </ul>
+  </div>
+  </div>
+  </div>
+<div class="col-md-10">
+<div class="panel panel-default">
+<table class="table table-striped">
+  <thead>
+   <tr>
+    <th>#</th>
+    <th>제목</th>
+    <th>가수</th>
+    <th>시간</th>
+  </tr>
+</thead>
+<tbody>
+{% set num = 1 %}
+
+{% for music in musiclist %}
+<tr>
+  <td>{{num}}</td>
+  <td>{{ music.name }}</td>
+  <td>{{ music.singer }}</td>
+  <td>{{ music.length }}</td>
+</tr>
+{% set num = num + 1%}
+
+{%endfor%}
+</tbody>
+
+</table>
+</div>
+</div>
+</div>
+
+{% endblock %}
