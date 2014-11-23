@@ -19,7 +19,7 @@
   <h3> 그룹 </h3>
     <ul>
   {%for group in user.grouplist%}
-    <li>{{group.name}}</li>
+    <li><a href="{{url_for('group')}}">{{group.name}}</a></li>
   {%endfor%}
     </ul>
   </div>
