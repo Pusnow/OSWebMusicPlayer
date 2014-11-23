@@ -7,6 +7,28 @@ $(".block-body").on("click",".album",function(e){
 } );
 
 
+$(".block-body").on("click",".musiclist",function(e){
+	var id = $(this).data("id");
+
+	var music = '<audio autoplay><source src="'+'/static/music/test.mp3'+'"type="audio/mpeg"></audio>';
+	$("#play").removeClass('glyphicon-play').addClass('glyphicon-pause');
+	$(".musicplayer").empty().append(music);
+
+
+
+} );
+
+
+$("#play").on("click",function(e){
+
+	$("#play").removeClass('glyphicon-pause').addClass('glyphicon-play');
+	$(".musicplayer").empty();
+
+
+
+} );
+
+
 $(".block-body").on("click","a",function(e){
 	e.preventDefault();
 	
@@ -48,7 +70,7 @@ function albummodal (albumid){
 			modal +='<tbody>'
 
 			for (var musicid in data.musiclist){
-				modal += '<tr>'
+				modal += '<tr class="musiclist" data-id="'+musicid+'">'
 				modal += '<td>'+data.musiclist[musicid].order+'</td>'
                 modal += '<td>'+data.musiclist[musicid].name+'</td>'
                 modal += '<td>'+data.musiclist[musicid].singer+'</td>'
