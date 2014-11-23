@@ -1,6 +1,6 @@
 #-*- coding:utf-8 -*-
 from WebMusicPlayer import app
-from flask import render_template
+from flask import render_template,request,jsonify
 
 
 
@@ -19,16 +19,16 @@ def index():
 @app.route('/main')
 def main():
 	albumlist1 = [
-	dict(name=u"끼이익",singer=u"이성원"),
-	dict(name=u"test",singer=u"test1"),
-	dict(name=u"test",singer=u"test1"),
-	dict(name=u"test",singer=u"test1"),
-	dict(name=u"test",singer=u"test1"),
-	dict(name=u"test",singer=u"test1"),
-	dict(name=u"test",singer=u"test1"),
-	dict(name=u"test",singer=u"test1"),
-	dict(name=u"test",singer=u"test1"),
-	dict(name=u"test",singer=u"test1")
+	dict(id = 1 ,name=u"e",singer=u"에픽하이", url=u"1.jpg"),
+	dict(id = 2 ,name=u"프롬,파리",singer=u"스웨인세탁소",url=u"2.jpg"),
+	dict(id = 3 ,name=u"Growing Season",singer=u"윤하",url=u"3.jpg"),
+	dict(id = 4 ,name=u"우산",singer=u"윤하",url=u"4.jpg"),
+	dict(id = 5 ,name=u"틈",singer=u"소유x어반자카파",url=u"5.jpg"),
+	dict(id = 6 ,name=u"나는 달라",singer=u"하이수현",url=u"6.jpg"),
+	dict(id = 7 ,name=u"광화문에서",singer=u"규현",url=u"7.jpg"),
+	dict(id = 8 ,name=u"HIM",singer=u"김범수",url=u"8.jpg"),
+	dict(id = 9 ,name=u"GOOD BOY",singer=u"GD X TAEYANG",url=u"9.jpg"),
+	dict(id = 10 ,name=u"Da Capo",singer=u"토이",url=u"10.jpg")
 	]
 	return render_template('album_view.html', albumlist=albumlist1)
 
@@ -101,3 +101,25 @@ def group():
 
 	return render_template('group.html', group = group1,albumlist=albumlist1, feedlist = feedlist1)
 
+
+@app.route('/albuminfo', methods=['POST'])
+def albuminfo ():
+	data = request.get_json()
+
+	print data['id']
+
+	json_data = dict(id = data['id'] ,name=u"e",singer=u"에픽하이", url=u"1.jpg")
+	musiclist1 = [
+	dict(order = 1, name=u"Oceans. Sand. Trees.  ",singer=u"이성원", length = 123),
+	dict(order = 2, name=u"Slow Motion",singer=u"test1", length = 123),
+	dict(order = 3, name=u"test",singer=u"test1", length = 123),
+	dict(order = 4, name=u"test",singer=u"test1", length = 123),
+	dict(order = 5, name=u"test",singer=u"test1", length = 123),
+	dict(order = 6, name=u"test",singer=u"test1", length = 123),
+	dict(order = 7, name=u"test",singer=u"test1", length = 123),
+	dict(order = 8, name=u"test",singer=u"test1", length = 123),
+	dict(order = 9, name=u"test",singer=u"test1", length = 123),
+	dict(order = 10, name=u"test",singer=u"test1", length = 123)
+	]
+	json_data ["musiclist"] =musiclist1
+	return jsonify(json_data)
