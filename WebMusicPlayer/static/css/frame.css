@@ -1,0 +1,15 @@
+
+
+.mainframe{
+	height: 100%;
+	width : 100%;
+	border: none;
+	margin: 0;
+	padding: 0;
+
+}
+
+body{
+	overflow-x: hidden; 
+    overflow-y: hidden;
+}

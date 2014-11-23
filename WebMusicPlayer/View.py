@@ -12,12 +12,17 @@ def shutdown_session(exception=None):
 
 
 @app.route('/')
-def index():
+def login():
     return render_template('login.html')
 
 
-@app.route('/main')
+@app.route('/main', methods=["GET","POST"])
 def main():
+	if request.method == 'POST':
+		post = True
+	else :
+		post = False
+
 	albumlist1 = [
 	dict(id = 1 ,name=u"e",singer=u"에픽하이", url=u"1.jpg"),
 	dict(id = 2 ,name=u"프롬,파리",singer=u"스웨인세탁소",url=u"2.jpg"),
@@ -30,12 +35,15 @@ def main():
 	dict(id = 9 ,name=u"GOOD BOY",singer=u"GD X TAEYANG",url=u"9.jpg"),
 	dict(id = 10 ,name=u"Da Capo",singer=u"토이",url=u"10.jpg")
 	]
-	return render_template('album_view.html', albumlist=albumlist1)
+	return render_template('album_view.html', albumlist=albumlist1, post=post)
 
 
-@app.route('/list')
+@app.route('/list',methods=["GET","POST"])
 def list():
-
+	if request.method == 'POST':
+		post = True
+	else :
+		post = False
 	musiclist1 = [
 	dict(name=u"끼이익",singer=u"이성원", length = 123),
 	dict(name=u"test",singer=u"test1", length = 123),
@@ -57,13 +65,16 @@ def list():
 	]
 
 
-	return render_template('list_view.html', musiclist = musiclist1, playlist = playlist1)
+	return render_template('list_view.html', musiclist = musiclist1, playlist = playlist1, post=post)
 
 
 
-@app.route('/social')
+@app.route('/social',methods=["GET","POST"])
 def social():
-
+	if request.method == 'POST':
+		post = True
+	else :
+		post = False
 	group1 = [
 		dict(name=u"어린이 합창단"),
 		dict(name=u"한승훈 주식회사")
@@ -80,10 +91,14 @@ def social():
 	]
 
 
-	return render_template('social.html', user = user1, feedlist = feedlist1)
+	return render_template('social.html', user = user1, feedlist = feedlist1, post=post)
 
-@app.route('/group')
+@app.route('/group',methods=["GET","POST"])
 def group():
+	if request.method == 'POST':
+		post = True
+	else :
+		post = False
 	memlist = [u"이성원",u"이성원 클론 1",u"이성원 클론 2 ",u"이성원 클론 3",u"이성원 클론 4"]
 	group1 = dict (name=u"어린이 합창단", memberlist = memlist)
 	albumlist1 = [
@@ -99,7 +114,7 @@ def group():
 
 
 
-	return render_template('group.html', group = group1,albumlist=albumlist1, feedlist = feedlist1)
+	return render_template('group.html', group = group1,albumlist=albumlist1, feedlist = feedlist1, post=post)
 
 
 @app.route('/albuminfo', methods=['POST'])

@@ -1,11 +1,27 @@
 
-$('.album').click(function() {
+$(".block-body").on("click",".album",function(e){
 	var id = $(this).data("id");
 	albummodal(id);
 
 
 } );
 
+
+$(".block-body").on("click","a",function(e){
+	e.preventDefault();
+	
+	$.ajax({
+		type: "POST",
+		contentType: "application/json; charset=utf-8",
+		url: $(this).attr('href'),
+		success: function(data){
+			$('.block-body').empty();
+			$('.block-body').append(data);
+		}
+	});
+
+
+});
 
 
 function albummodal (albumid){
@@ -28,7 +44,7 @@ function albummodal (albumid){
 			modal +='<h2>'+data.name+'</h2>'
 			modal +='<h3>'+data.singer+'</h3>'
 			modal +='<br>'
-			modal +='<table class="table table-striped"><thead><tr><th>#</th><th>제목</th><th>가수</th><th>시간</th></tr></thead>'
+			modal +='<table class="table table-striped table-hover"><thead><tr><th>#</th><th>제목</th><th>가수</th><th>시간</th></tr></thead>'
 			modal +='<tbody>'
 
 			for (var musicid in data.musiclist){
@@ -36,7 +52,7 @@ function albummodal (albumid){
 				modal += '<td>'+data.musiclist[musicid].order+'</td>'
                 modal += '<td>'+data.musiclist[musicid].name+'</td>'
                 modal += '<td>'+data.musiclist[musicid].singer+'</td>'
-                modal += '<td>'+data.musiclist[musicid].length+'</td>'
+                modal += '<td>'+Math.floor(data.musiclist[musicid].length/60)+':'+data.musiclist[musicid].length%60+'</td>'
                 modal += '</tr>'
 
 			}

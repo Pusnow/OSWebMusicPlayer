@@ -1,4 +1,4 @@
-{% extends "default_layout.html" %}
+{%if not post %}{% extends "default_layout.html" %}{% endif %}
 {% block body %}
 
 <ul class="nav nav-pills" id = "mainnav">
@@ -20,6 +20,7 @@
 </div>
 {% endfor %}
 <div class = "albummodal">
+</div>
 </div>
 
 
