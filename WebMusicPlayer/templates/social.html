@@ -32,10 +32,10 @@
 {%for feed in feedlist%}
   <div class = "panel panel-default">
     <div class="panel-heading">
-     {{feed.user}}    <a href ="#">같이 듣기 </a>
+     {{feed.user}}    
     </div>
     <div class="panel-body">
-    {{feed.text}}
+    {{feed.text}}  <a href ="#">같이 듣기 </a>
     </div>
   </div>
 {% endfor %}

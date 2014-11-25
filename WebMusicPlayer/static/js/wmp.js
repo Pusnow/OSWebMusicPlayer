@@ -9,10 +9,33 @@ $(".block-body").on("click",".album",function(e){
 
 $(".block-body").on("click",".musiclist",function(e){
 	var id = $(this).data("id");
+	var albumid = $(this).data("albumid");
 
-	var music = '<audio class = "musicaudio" autoplay><source src="'+'/static/music/test.mp3'+'"type="audio/mpeg"></audio>';
-	$("#play").removeClass('glyphicon-play').addClass('glyphicon-pause');
-	$(".musicplayer").empty().append(music);
+
+
+	var json_data = {};
+	json_data["id"]=id;
+	json_data["albumid"]=albumid;
+	$.ajax({
+		type: "POST",
+		contentType: "application/json; charset=utf-8",
+		url: $SCRIPT_ROOT + "/musicstream",
+		data: JSON.stringify(json_data),
+		success: function (data) {
+			console.log(data);
+
+			var music = '<audio class = "musicaudio" autoplay><source src="'+data.url+'"type="audio/mpeg"></audio>';
+			console.log(music);
+			$("#play").removeClass('glyphicon-play').addClass('glyphicon-pause');
+			$(".musicplayer").empty().append(music);
+			
+
+		},
+		dataType: "json"
+	});
+
+
+	
 
 
 
@@ -69,7 +92,6 @@ function albummodal (albumid){
 
 			var modal = '<div class="modal fade" id="album'+data.id+'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'
 			modal +='<div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><h4 class="modal-title" id="myModalLabel">Album Info</h4></div><div class="modal-body">'
-			
 			modal +='<img class = "albuminfo" src ="/static/img/album/' +data.url+ '"></img>'
 			modal +='<h2>'+data.name+'</h2>'
 			modal +='<h3>'+data.singer+'</h3>'
@@ -78,7 +100,7 @@ function albummodal (albumid){
 			modal +='<tbody>'
 
 			for (var musicid in data.musiclist){
-				modal += '<tr class="musiclist" data-id="'+musicid+'">'
+				modal += '<tr class="musiclist" data-id="'+musicid+'" data-albumid="'+albumid+'">'
 				modal += '<td>'+data.musiclist[musicid].order+'</td>'
                 modal += '<td>'+data.musiclist[musicid].name+'</td>'
                 modal += '<td>'+data.musiclist[musicid].singer+'</td>'
@@ -95,5 +117,10 @@ function albummodal (albumid){
 		},
 		dataType: "json"
 	});
+	
+}
+
+function getstream (albumid, songid){
+	
 	
 }

@@ -123,18 +123,29 @@ def albuminfo ():
 
 	print data['id']
 
-	json_data = dict(id = data['id'] ,name=u"e",singer=u"에픽하이", url=u"1.jpg")
+	json_data = dict(id = data['id'] ,name=u"Da Capo",singer=u"토이", url=u"10.jpg")
 	musiclist1 = [
-	dict(order = 1, name=u"Oceans. Sand. Trees.  ",singer=u"이성원", length = 123),
-	dict(order = 2, name=u"Slow Motion",singer=u"test1", length = 123),
-	dict(order = 3, name=u"test",singer=u"test1", length = 123),
-	dict(order = 4, name=u"test",singer=u"test1", length = 123),
-	dict(order = 5, name=u"test",singer=u"test1", length = 123),
-	dict(order = 6, name=u"test",singer=u"test1", length = 123),
-	dict(order = 7, name=u"test",singer=u"test1", length = 123),
-	dict(order = 8, name=u"test",singer=u"test1", length = 123),
-	dict(order = 9, name=u"test",singer=u"test1", length = 123),
-	dict(order = 10, name=u"test",singer=u"test1", length = 123)
+	dict(order = 1, name=u"아무도 모른다 (Inst.)",singer=u"토이", length = 123),
+	dict(order = 2, name=u"Reset (With 이적)",singer=u"토이", length = 123),
+	dict(order = 3, name=u"Goodbye sun, Goodbye moon (With 이수현 of 악동뮤지션)",singer=u"토이", length = 123),
+	dict(order = 4, name=u"세 사람 (With 성시경)",singer=u"토이", length = 123),
+	dict(order = 5, name=u"너의 바다에 머무네 (With 김동률",singer=u"토이", length = 123),
+	dict(order = 6, name=u"U & I (With Crush & 빈지노)",singer=u"토이", length = 123),
+	dict(order = 7, name=u"인생은 아름다워 (With 다이나믹듀오 & Zion. T & Crush)",singer=u"토이", length = 123),
+	dict(order = 8, name=u"피아노 (Inst.)",singer=u"토이", length = 123),
+	dict(order = 9, name=u"피아니시모 (With 김예림)",singer=u"토이", length = 123),
+	dict(order = 10, name=u"그녀가 말했다 (With 권진아)",singer=u"토이", length = 123)
 	]
 	json_data ["musiclist"] =musiclist1
+	return jsonify(json_data)
+
+@app.route('/musicstream', methods=['POST'])
+def musicstream ():
+	data = request.get_json()
+
+	if data['id'] == 5 :
+		json_data = dict(id = data['id'] , url=u'/static/music/토이-06-U & I (With Crush & 빈지노).mp3')
+	else :
+		json_data = dict(id = data['id'] , url=u'/static/music/토이-01-아무도 모른다 (Inst.).mp3')
+	
 	return jsonify(json_data)
