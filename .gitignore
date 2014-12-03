@@ -1,6 +1,6 @@
 #mp3file
 *.mp3
-
+album/*
 
 #Sublime Text
 

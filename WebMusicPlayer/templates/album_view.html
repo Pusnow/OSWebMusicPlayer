@@ -12,7 +12,7 @@
   {% for album in albumlist %}
   <div class="album" data-id='{{album.id}}'>
    
-    <img class = "albumimg" src ="{{ url_for('static', filename='img/album/' + album.url) }}"/>
+    <img class = "albumimg" src ="{{ url_for('static', filename='img/album/' + album.name +'.jpg') }}"/>
   <!--<a href = "#album{{album.id}}" data-toggle="modal"></a>-->
 <p class = "albumtext">
   {{album.name}} <br>{{album.singer}}

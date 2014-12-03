@@ -1,6 +1,7 @@
 #-*- coding:utf-8 -*-
 from WebMusicPlayer import app
 from flask import render_template,request,jsonify
+from database import Session, music, album
 
 
 
@@ -12,8 +13,21 @@ def shutdown_session(exception=None):
 
 
 @app.route('/')
-def login():
+def index():
     return render_template('login.html')
+
+@app.route('/login', methods=["GET","POST"])
+def login ():
+	if request.form['username'] != app.config['USERNAME']:
+		error = 'Invalid username'
+	elif request.form['password'] != app.config['PASSWORD']:
+		error = 'Invalid password'
+        else:
+            session['logged_in'] = True
+            flash('You were logged in')
+            return redirect(url_for('show_entries'))
+	return render_template('login.html', error=error)
+
 
 
 @app.route('/main', methods=["GET","POST"])
@@ -23,18 +37,11 @@ def main():
 	else :
 		post = False
 
-	albumlist1 = [
-	dict(id = 1 ,name=u"e",singer=u"에픽하이", url=u"1.jpg"),
-	dict(id = 2 ,name=u"프롬,파리",singer=u"스웨인세탁소",url=u"2.jpg"),
-	dict(id = 3 ,name=u"Growing Season",singer=u"윤하",url=u"3.jpg"),
-	dict(id = 4 ,name=u"우산",singer=u"윤하",url=u"4.jpg"),
-	dict(id = 5 ,name=u"틈",singer=u"소유x어반자카파",url=u"5.jpg"),
-	dict(id = 6 ,name=u"나는 달라",singer=u"하이수현",url=u"6.jpg"),
-	dict(id = 7 ,name=u"광화문에서",singer=u"규현",url=u"7.jpg"),
-	dict(id = 8 ,name=u"HIM",singer=u"김범수",url=u"8.jpg"),
-	dict(id = 9 ,name=u"GOOD BOY",singer=u"GD X TAEYANG",url=u"9.jpg"),
-	dict(id = 10 ,name=u"Da Capo",singer=u"토이",url=u"10.jpg")
-	]
+
+	albumlist1 = Session.query(album).order_by(album.id).all()
+	for a in albumlist1 :
+		print a.name
+
 	return render_template('album_view.html', albumlist=albumlist1, post=post)
 
 
@@ -122,8 +129,8 @@ def albuminfo ():
 	data = request.get_json()
 
 	print data['id']
-
-	json_data = dict(id = data['id'] ,name=u"Da Capo",singer=u"토이", url=u"10.jpg")
+	album1 = Session.query(album).filter(album.id==data['id']).one()
+	json_data = dict(id = data['id'] ,name=album1.name,singer=album1.singer, url=album1.name+'.jpg', musicnum = album1.music_count)
 	musiclist1 = [
 	dict(order = 1, name=u"아무도 모른다 (Inst.)",singer=u"토이", length = 123),
 	dict(order = 2, name=u"Reset (With 이적)",singer=u"토이", length = 123),
@@ -136,12 +143,18 @@ def albuminfo ():
 	dict(order = 9, name=u"피아니시모 (With 김예림)",singer=u"토이", length = 123),
 	dict(order = 10, name=u"그녀가 말했다 (With 권진아)",singer=u"토이", length = 123)
 	]
+	musiclist1=[]
+	for m in Session.query(music).filter(music.albumid==data['id']).order_by(music.num).all():
+		musiclist1.append(m.diction())
 	json_data ["musiclist"] =musiclist1
 	return jsonify(json_data)
 
 @app.route('/musicstream', methods=['POST'])
 def musicstream ():
 	data = request.get_json()
+
+
+
 
 	if data['id'] == 5 :
 		json_data = dict(id = data['id'] , url=u'/static/music/토이-06-U & I (With Crush & 빈지노).mp3')

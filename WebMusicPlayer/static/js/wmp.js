@@ -95,13 +95,14 @@ function albummodal (albumid){
 			modal +='<img class = "albuminfo" src ="/static/img/album/' +data.url+ '"></img>'
 			modal +='<h2>'+data.name+'</h2>'
 			modal +='<h3>'+data.singer+'</h3>'
+			modal +='<h4> 총 '+data.musicnum+'곡</h4>'
 			modal +='<br>'
 			modal +='<table class="table table-striped table-hover"><thead><tr><th>#</th><th>제목</th><th>가수</th><th>시간</th></tr></thead>'
 			modal +='<tbody>'
 
 			for (var musicid in data.musiclist){
 				modal += '<tr class="musiclist" data-id="'+musicid+'" data-albumid="'+albumid+'">'
-				modal += '<td>'+data.musiclist[musicid].order+'</td>'
+				modal += '<td>'+data.musiclist[musicid].num+'</td>'
                 modal += '<td>'+data.musiclist[musicid].name+'</td>'
                 modal += '<td>'+data.musiclist[musicid].singer+'</td>'
                 modal += '<td>'+Math.floor(data.musiclist[musicid].length/60)+':'+data.musiclist[musicid].length%60+'</td>'
