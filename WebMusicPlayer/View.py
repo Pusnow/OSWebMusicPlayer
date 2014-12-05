@@ -22,10 +22,10 @@ def login ():
 		error = 'Invalid username'
 	elif request.form['password'] != app.config['PASSWORD']:
 		error = 'Invalid password'
-        else:
-            session['logged_in'] = True
-            flash('You were logged in')
-            return redirect(url_for('show_entries'))
+	else:
+			session['logged_in'] = True
+			flash('You were logged in')
+			return redirect(url_for('show_entries'))
 	return render_template('login.html', error=error)
 
 
@@ -131,18 +131,6 @@ def albuminfo ():
 	print data['id']
 	album1 = Session.query(album).filter(album.id==data['id']).one()
 	json_data = dict(id = data['id'] ,name=album1.name,singer=album1.singer, url=album1.name+'.jpg', musicnum = album1.music_count)
-	musiclist1 = [
-	dict(order = 1, name=u"아무도 모른다 (Inst.)",singer=u"토이", length = 123),
-	dict(order = 2, name=u"Reset (With 이적)",singer=u"토이", length = 123),
-	dict(order = 3, name=u"Goodbye sun, Goodbye moon (With 이수현 of 악동뮤지션)",singer=u"토이", length = 123),
-	dict(order = 4, name=u"세 사람 (With 성시경)",singer=u"토이", length = 123),
-	dict(order = 5, name=u"너의 바다에 머무네 (With 김동률",singer=u"토이", length = 123),
-	dict(order = 6, name=u"U & I (With Crush & 빈지노)",singer=u"토이", length = 123),
-	dict(order = 7, name=u"인생은 아름다워 (With 다이나믹듀오 & Zion. T & Crush)",singer=u"토이", length = 123),
-	dict(order = 8, name=u"피아노 (Inst.)",singer=u"토이", length = 123),
-	dict(order = 9, name=u"피아니시모 (With 김예림)",singer=u"토이", length = 123),
-	dict(order = 10, name=u"그녀가 말했다 (With 권진아)",singer=u"토이", length = 123)
-	]
 	musiclist1=[]
 	for m in Session.query(music).filter(music.albumid==data['id']).order_by(music.num).all():
 		musiclist1.append(m.diction())
