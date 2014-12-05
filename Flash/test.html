@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>FLASH Test</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+<script language="javascript">
+
+	function set(){
+		var flash =	document.getElementById("as3_js");
+		console.log(flash);
+		flash.set_("rtmp://os.pusnow.com/vod/");
+	}
+	function start(){
+		var flash =	document.getElementById("as3_js");
+		flash.start("test.flv");
+	}
+	function pause(){
+		var flash =	document.getElementById("as3_js");
+		flash.pause();
+	}
+	function play(){
+		var flash =	document.getElementById("as3_js");
+		flash.play();
+	}
+	function stop(){
+		var flash =	document.getElementById("as3_js");
+		flash.stop();
+	}
+
+	var flashvars = {};
+	var params = {};
+	var attributes = {};
+	attributes.id = "as3_js";
+	swfobject.embedSWF("./rtmpplay.swf", "alt", "1", "1", "9.0.0", false, flashvars, params, attributes);
+
+</script>
+<style type="text/css">.js{width:450px;height:450px;float:left;margin:10px;background:#ccc;border:1px solid #333;}.js textarea{width:430px;height:300px;margin:10px;border:1px solid #333;}.js input{margin:20px auto 12px;padding:14px;background:#fff;border:5px solid #999;-moz-border-radius:30px;-webkit-border-radius:30px;border-radius:30px;height:60px;width:200px;display:block;font-size:12px;font-family:Arial;cursor:pointer;}.js p{margin:0;text-align:center;font-size:12px;font-family:Arial;}.as3{width:450px;height:450px;float:left;margin:10px;background:#ccc;border:1px solid #333;}.s_code{width:450px;float:left;margin:10px;background:#ccc;border:1px solid #333;}.s_code h3{margin:10px;}.s_code code{border:1px solid #333;background:#eee;padding:10px;margin:10px;display:block;overflow:auto;}</style>
+</head>
+<body>
+<h2>Flash RTMP Control Test by JS</h2>
+<p>rtmpplay</p>
+<div id ="alt"></div>
+
+
+<ul>
+<li><a href="javascript:set();">Set</a></li>
+<li><a href="javascript:start();">Start</a></li>
+<li><a href="javascript:stop();">stop</a></li>
+<li><a href="javascript:pause();">pause</a></li>
+<li><a href="javascript:play();">play</a></li>
+
+</ul>
+
+
+</body>
+</html>
