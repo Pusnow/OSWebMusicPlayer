@@ -40,7 +40,7 @@ def main():
 
 	albumlist1 = Session.query(album).order_by(album.id).all()
 	for a in albumlist1 :
-		print a.name
+		print a.name+".jpg"
 
 	return render_template('album_view.html', albumlist=albumlist1, post=post)
 
@@ -128,7 +128,6 @@ def group():
 def albuminfo ():
 	data = request.get_json()
 
-	print data['id']
 	album1 = Session.query(album).filter(album.id==data['id']).one()
 	json_data = dict(id = data['id'] ,name=album1.name,singer=album1.singer, url=album1.name+'.jpg', musicnum = album1.music_count)
 	musiclist1=[]
