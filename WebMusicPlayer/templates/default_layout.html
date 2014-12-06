@@ -27,6 +27,7 @@
       <a class="navbar-player navbar-brand"><span class="glyphicon glyphicon-play" id="play"></span></a>
       <a class="navbar-player navbar-brand"><span class="glyphicon glyphicon-forward" id="next"></span></a>
       </div>
+      <div id = "player"></div>
 
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -48,6 +49,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"></script>
 <script src="{{ url_for('static', filename='js/jquery.twbsPagination.min.js')}}"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+<script src="{{ url_for('static', filename='js/soundcontrol.js')}}"></script>
 <script src="{{ url_for('static', filename='js/wmp.js')}}"></script>
 
 <!--[if lt IE 9]>

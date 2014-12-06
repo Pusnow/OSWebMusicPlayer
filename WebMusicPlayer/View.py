@@ -2,7 +2,8 @@
 from WebMusicPlayer import app
 from flask import render_template,request,jsonify
 from database import Session, music, album
-
+import os
+import subprocess
 
 
 @app.teardown_request
@@ -49,6 +50,7 @@ def main():
 def list():
 	if request.method == 'POST':
 		post = True
+
 	else :
 		post = False
 	musiclist1 = [
@@ -140,12 +142,11 @@ def albuminfo ():
 def musicstream ():
 	data = request.get_json()
 
+	music1 = Session.query(music).filter(music.id==data['id']).one()
+	origin = os.getcwd() + "/WebMusicPlayer/static/music/" + music1.filename[1:-4] +".flv"
+	link = "/tmp/flvs/asdf.flv"
 
-
-
-	if data['id'] == 5 :
-		json_data = dict(id = data['id'] , url=u'/static/music/토이-06-U & I (With Crush & 빈지노).mp3')
-	else :
-		json_data = dict(id = data['id'] , url=u'/static/music/토이-01-아무도 모른다 (Inst.).mp3')
+	subprocess.call(["ln","-s",origin,link])
+	json_data = {}
 	
 	return jsonify(json_data)

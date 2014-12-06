@@ -37,7 +37,7 @@ class music (Base):
 	length = Column(Integer)
 	genre = Column(String)
 	year = Column(Integer)
-
+	filename = Column(Integer)
 
 
 	def __repr__(self):

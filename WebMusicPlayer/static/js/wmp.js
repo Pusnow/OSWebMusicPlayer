@@ -1,3 +1,6 @@
+var isSet = false;
+var isPlay = true;
+
 
 $(".block-body").on("click",".album",function(e){
 	var id = $(this).data("id");
@@ -24,10 +27,13 @@ $(".block-body").on("click",".musiclist",function(e){
 		success: function (data) {
 			console.log(data);
 
-			var music = '<audio class = "musicaudio" autoplay><source src="'+data.url+'"type="audio/mpeg"></audio>';
-			console.log(music);
 			$("#play").removeClass('glyphicon-play').addClass('glyphicon-pause');
-			$(".musicplayer").empty().append(music);
+			if (!isSet){
+				set("rtmp://os.pusnow.com/vod/")
+				isSet=true;
+			}
+			start("asdf.flv");
+			isPlay=true;
 			
 
 		},
@@ -45,17 +51,17 @@ $(".block-body").on("click",".musiclist",function(e){
 $("#play").on("click",function(e){
 
 	
-	song = $(".musicaudio").get(0);
-
-	if(song.paused){
-        song.play();
-        $("#play").removeClass('glyphicon-play').addClass('glyphicon-pause');
+	
+	if(isPlay){
+       pause();
+        $("#play").removeClass('glyphicon-pause').addClass('glyphicon-play');
+        isPlay=false;
        } else {
-         song.pause();
-         $("#play").removeClass('glyphicon-pause').addClass('glyphicon-play');
+         play();
+         $("#play").removeClass('glyphicon-play').addClass('glyphicon-pause');
+         
+         isPlay=true;
     }
-
-
 
 } );
 
@@ -101,7 +107,7 @@ function albummodal (albumid){
 			modal +='<tbody>'
 
 			for (var musicid in data.musiclist){
-				modal += '<tr class="musiclist" data-id="'+musicid+'" data-albumid="'+albumid+'">'
+				modal += '<tr class="musiclist" data-id="'+data.musiclist[musicid].id+'" data-albumid="'+albumid+'">'
 				modal += '<td>'+data.musiclist[musicid].num+'</td>'
                 modal += '<td>'+data.musiclist[musicid].name+'</td>'
                 modal += '<td>'+data.musiclist[musicid].singer+'</td>'
