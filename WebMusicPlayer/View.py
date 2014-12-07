@@ -164,14 +164,17 @@ def musicstream ():
 	music1 = Session.query(music).filter(music.id==data['id']).one()
 	origin = os.getcwd() + "/WebMusicPlayer/static/music/" + music1.filename[1:-4] +".flv"
 	#time hash : hashlib.md5(str(datetime.today())).hexdigest()
-	flvfile = hashlib.md5(str(datetime.today())).hexdigest() + ".flv"
+	flvfile = unicode(session['userid']) +"_"+hashlib.md5(str(datetime.today())).hexdigest() + ".flv"
 	link = "/tmp/flvs/" + flvfile
+	print flvfile
 
 	if os.path.isfile(origin):
-		subprocess.call(["rm /tmp/flvs/*.flv"],shell=True)
+		#subprocess.call(["rm /tmp/flvs/"+ unicode(session['userid']) +"_*.flv"],shell=True)
 		subprocess.call(["ln","-s",origin,link])
+		json_data = dict (flv = flvfile)
 	else :
+		json_data = dict (flv = "")
 		print "File Not Found : " + origin
-	json_data = dict (flv = flvfile)
+	
 	
 	return jsonify(json_data)

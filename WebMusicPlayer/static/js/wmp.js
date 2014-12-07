@@ -17,8 +17,8 @@ function playbyid(id){
 		url: $SCRIPT_ROOT + "/musicstream",
 		data: JSON.stringify(json_data),
 		success: function (data) {
-			console.log(data);
-
+			//console.log(data);
+			console.log(data.flv);
 			$("#play").removeClass('glyphicon-play').addClass('glyphicon-pause');
 			if (!isSet){
 				set("rtmp://os.pusnow.com/vod/")
@@ -166,7 +166,7 @@ $("#player-list").on("click",function(e){
 	$("#plaer-list").popover('toggle');
 } );
 
-$(".block-body").on("click","a",function(e){
+$(".block-body").on("click","a#menu",function(e){
 	e.preventDefault();
 	
 	$.ajax({
