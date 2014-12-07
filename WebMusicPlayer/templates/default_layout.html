@@ -2,6 +2,7 @@
 <head>
   <title>Web Music Player</title>
   <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/bootstrap-slider.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" user-scalable=no>
   <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
@@ -23,16 +24,20 @@
         <a class="navbar-brand" href="/">Web Music Player <small>Demo</small></a>
       </div>
       <div class="navbar-center navbar-player navbar-brand" href="#">
+
+      <a class="navbar-player navbar-brand"><span class="glyphicon glyphicon-volume-up" id="player-volume"></span></a>
       <a class="navbar-player navbar-brand"><span class="glyphicon glyphicon-backward" id="back"></span></a>
       <a class="navbar-player navbar-brand"><span class="glyphicon glyphicon-play" id="play"></span></a>
       <a class="navbar-player navbar-brand"><span class="glyphicon glyphicon-forward" id="next"></span></a>
+      <a class="navbar-player navbar-brand"><span class="glyphicon glyphicon-repeat" id="player-repeat"></span></a>
+      <a class="navbar-player navbar-brand"><span class="glyphicon glyphicon-list" id="player-list"></span></a>
       </div>
+      
       <div id = "player"></div>
 
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-right"><li>
-    </ul>
+      
   </div>
 
 </div >
@@ -49,6 +54,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"></script>
 <script src="{{ url_for('static', filename='js/jquery.twbsPagination.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-slider.js')}}"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
 <script src="{{ url_for('static', filename='js/soundcontrol.js')}}"></script>
 <script src="{{ url_for('static', filename='js/wmp.js')}}"></script>

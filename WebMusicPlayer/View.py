@@ -4,12 +4,13 @@ from flask import render_template,request,jsonify
 from database import Session, music, album
 import os
 import subprocess
+import hashlib
+from datetime import datetime
 
 
 @app.teardown_request
 def shutdown_session(exception=None):
-    #DB 세션 끊을 것
-    pass
+    pass#subprocess.call(["rm","/tmp/flvs/*.flv"])
 
 
 
@@ -144,9 +145,15 @@ def musicstream ():
 
 	music1 = Session.query(music).filter(music.id==data['id']).one()
 	origin = os.getcwd() + "/WebMusicPlayer/static/music/" + music1.filename[1:-4] +".flv"
-	link = "/tmp/flvs/asdf.flv"
+	#time hash : hashlib.md5(str(datetime.datetime.today())).hexdigest()
+	flvfile = hashlib.md5(str(datetime.today())).hexdigest() + ".flv"
+	link = "/tmp/flvs/" + flvfile
 
-	subprocess.call(["ln","-s",origin,link])
-	json_data = {}
+	if os.path.isfile(origin):
+		subprocess.call(["rm /tmp/flvs/*.flv"],shell=True)
+		subprocess.call(["ln","-s",origin,link])
+	else :
+		print "File Not Found : " + origin
+	json_data = dict (flv = flvfile)
 	
 	return jsonify(json_data)

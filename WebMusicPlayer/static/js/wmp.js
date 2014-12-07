@@ -1,24 +1,16 @@
 var isSet = false;
 var isPlay = true;
 
+var playlist={
+	current : 0,
+	playlist : []
 
-$(".block-body").on("click",".album",function(e){
-	var id = $(this).data("id");
-	albummodal(id);
-
-
-} );
+};
 
 
-$(".block-body").on("click",".musiclist",function(e){
-	var id = $(this).data("id");
-	var albumid = $(this).data("albumid");
-
-
-
+function playbyid(id){
 	var json_data = {};
 	json_data["id"]=id;
-	json_data["albumid"]=albumid;
 	$.ajax({
 		type: "POST",
 		contentType: "application/json; charset=utf-8",
@@ -32,14 +24,94 @@ $(".block-body").on("click",".musiclist",function(e){
 				set("rtmp://os.pusnow.com/vod/")
 				isSet=true;
 			}
-			start("asdf.flv");
+			start(data.flv);
 			isPlay=true;
 			
+			//$("#playtable").empty().append(playlisttable());
+			$("#player-list").popover('destroy');
+			$("#player-list").popover({
+				placement : 'bottom', // top, bottom, left or right
+				title : 'Playlist', 
+				html: 'true', 
+				tabindex: "-1",
+				content : "<div id=playtable>"+playlisttable()+"</div>"
+			});
 
 		},
 		dataType: "json"
 	});
 
+
+};
+
+function playprev(){
+	if (playlist.current != 0){
+		playbyid(playlist.playlist[playlist.current-1].id);
+		playlist.current = playlist.current-1;
+	}
+	else{
+		playbyid(playlist.playlist[playlist.playlist.length-1].id);
+		playlist.current = playlist.length-1;
+	}
+}
+
+function playnext(){
+	if (playlist.current != playlist.current.length-1){
+		playbyid(playlist.playlist[playlist.current+1].id);
+		playlist.current = playlist.current+1;
+	}
+	else{
+		playbyid(playlist.playlist[0].id);
+		playlist.current = 0;
+	}
+}
+function playlisttable(){
+	var table = ""
+	table +='<table class="table table-striped table-hover"><thead><tr><th>#</th><th>제목</th></tr></thead>'
+	table +='<tbody>'
+
+	for (var musicid in playlist.playlist){
+		table += '<tr class="musiclist" data-id="'+playlist.playlist[musicid].id+'">'
+		if (musicid == playlist.current){
+			table += '<td><span class="glyphicon glyphicon-chevron-right"></td>'
+		}
+		else{
+			table += '<td> </td>'
+		}
+
+		
+		table += '<td>'+playlist.playlist[musicid].name+'</td>'
+		table += '</tr>'
+	}
+
+	table += '</tbody> </table>'
+
+	return table;
+}
+
+
+$('#volume').slider({
+});
+
+$(".block-body").on("click",".album",function(e){
+	var id = $(this).data("id");
+	albummodal(id);
+
+
+} );
+
+
+$(".block-body").on("click",".musiclist",function(e){
+	var id = $(this).data("id");
+	var albumid = $(this).data("albumid");
+	var num = $(this).data("num");
+	setPlaylistAlbum(albumid);
+	playbyid(id);
+	
+	for (var musicid in playlist.playlist){
+			if (playlist.playlist[musicid].id == id)
+				playlist.current=musicid;
+	}
 
 	
 
@@ -65,6 +137,24 @@ $("#play").on("click",function(e){
 
 } );
 
+$("#back").on("click",function(e){
+	playprev();
+	
+	
+	
+	
+
+} );
+
+$("#next").on("click",function(e){
+	playnext();
+	
+} );
+
+
+$("#player-list").on("click",function(e){
+	$("#plaer-list").popover('toggle');
+} );
 
 $(".block-body").on("click","a",function(e){
 	e.preventDefault();
@@ -107,7 +197,7 @@ function albummodal (albumid){
 			modal +='<tbody>'
 
 			for (var musicid in data.musiclist){
-				modal += '<tr class="musiclist" data-id="'+data.musiclist[musicid].id+'" data-albumid="'+albumid+'">'
+				modal += '<tr class="musiclist" data-id="'+data.musiclist[musicid].id+'" data-albumid="'+albumid+'"data-num='+data.musiclist[musicid].num+'>'
 				modal += '<td>'+data.musiclist[musicid].num+'</td>'
                 modal += '<td>'+data.musiclist[musicid].name+'</td>'
                 modal += '<td>'+data.musiclist[musicid].singer+'</td>'
@@ -121,13 +211,29 @@ function albummodal (albumid){
 			$('#album'+albumid).modal()
 			
 
+			
+
 		},
 		dataType: "json"
 	});
 	
 }
 
-function getstream (albumid, songid){
-	
-	
+function setPlaylistAlbum (albumid){
+	var json_data = {};
+	json_data["id"]=albumid;
+
+	$.ajax({
+		type: "POST",
+		contentType: "application/json; charset=utf-8",
+		url: $SCRIPT_ROOT + "/albuminfo",
+		data: JSON.stringify(json_data),
+		success: function (data) {
+			console.log(data);
+			playlist.playlist = data.musiclist;
+			//playlist.current = num;
+		},
+		dataType: "json"
+	});
+
 }
