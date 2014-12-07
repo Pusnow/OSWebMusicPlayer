@@ -45,3 +45,15 @@ class music (Base):
 
 	def diction(self):
 		return dict(id=self.id,albumid=self.albumid,albumname=self.albumname,num=self.num,name=self.name,singer=self.singer,length=self.length,genre=self.genre,year=self.year)
+
+
+
+class user (Base):
+	__tablename__ = 'user'
+	id = Column(Integer, primary_key=True)
+	name = Column(String)
+	pw = Column(String)
+
+
+	def __repr__(self):
+		return "<user ('%s')>" %(self.name)

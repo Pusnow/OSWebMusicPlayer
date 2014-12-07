@@ -44,25 +44,35 @@ function playbyid(id){
 
 };
 
+function streamFinish() {
+	//call by Flash
+	playnext();
+}
+
+
 function playprev(){
 	if (playlist.current != 0){
-		playbyid(playlist.playlist[playlist.current-1].id);
 		playlist.current = playlist.current-1;
+		playbyid(playlist.playlist[playlist.current].id);
+		
 	}
 	else{
+		playlist.current = playlist.playlist.length-1;
 		playbyid(playlist.playlist[playlist.playlist.length-1].id);
-		playlist.current = playlist.length-1;
+		
 	}
 }
 
 function playnext(){
-	if (playlist.current != playlist.current.length-1){
-		playbyid(playlist.playlist[playlist.current+1].id);
+	if (playlist.current != playlist.playlist.length-1){
 		playlist.current = playlist.current+1;
+		playbyid(playlist.playlist[playlist.current].id);
+		
 	}
 	else{
-		playbyid(playlist.playlist[0].id);
 		playlist.current = 0;
+		playbyid(playlist.playlist[0].id);
+		
 	}
 }
 function playlisttable(){
@@ -71,7 +81,7 @@ function playlisttable(){
 	table +='<tbody>'
 
 	for (var musicid in playlist.playlist){
-		table += '<tr class="musiclist" data-id="'+playlist.playlist[musicid].id+'">'
+		table += '<tr class="musiclist" data-id="'+playlist.playlist[musicid].id+'" data-albumid="'+playlist.playlist[musicid].albumid+'"data-num='+playlist.playlist[musicid].num+'>'
 		if (musicid == playlist.current){
 			table += '<td><span class="glyphicon glyphicon-chevron-right"></td>'
 		}
@@ -101,7 +111,7 @@ $(".block-body").on("click",".album",function(e){
 } );
 
 
-$(".block-body").on("click",".musiclist",function(e){
+$("body").on("click",".musiclist",function(e){
 	var id = $(this).data("id");
 	var albumid = $(this).data("albumid");
 	var num = $(this).data("num");
@@ -110,7 +120,7 @@ $(".block-body").on("click",".musiclist",function(e){
 	
 	for (var musicid in playlist.playlist){
 			if (playlist.playlist[musicid].id == id)
-				playlist.current=musicid;
+				playlist.current=parseInt(musicid);
 	}
 
 	

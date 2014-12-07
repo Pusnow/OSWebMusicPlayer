@@ -1,12 +1,15 @@
 #-*- coding:utf-8 -*-
 from WebMusicPlayer import app
-from flask import render_template,request,jsonify
-from database import Session, music, album
+from flask import render_template,request,jsonify, session, flash, redirect, url_for
+from database import Session, music, album, user
 import os
 import subprocess
 import hashlib
 from datetime import datetime
 
+app.config.update(dict(
+	SECRET_KEY = hashlib.md5(str(datetime.today())).hexdigest()
+	))
 
 @app.teardown_request
 def shutdown_session(exception=None):
@@ -16,24 +19,33 @@ def shutdown_session(exception=None):
 
 @app.route('/')
 def index():
-    return render_template('login.html')
+	if session.get('logged_in'):
+		return redirect(url_for('main'))
+	return render_template('login.html')
 
-@app.route('/login', methods=["GET","POST"])
+@app.route('/login', methods=["POST"])
 def login ():
-	if request.form['username'] != app.config['USERNAME']:
+
+	loginuser = Session.query(user).filter(user.name==request.form['username']).all()
+	if not loginuser :
 		error = 'Invalid username'
-	elif request.form['password'] != app.config['PASSWORD']:
+	elif hashlib.md5(request.form['password']).hexdigest() != loginuser[0].pw :
 		error = 'Invalid password'
 	else:
 			session['logged_in'] = True
-			flash('You were logged in')
-			return redirect(url_for('show_entries'))
-	return render_template('login.html', error=error)
+			session['userid'] = loginuser[0].id
+			session['username'] = loginuser[0].name
+			#flash('You were logged in')
+			return redirect(url_for('main'))
+	print error
+	return render_template('login.html')
 
 
 
 @app.route('/main', methods=["GET","POST"])
 def main():
+	if not session.get('logged_in'):
+		return redirect(url_for('index'))
 	if request.method == 'POST':
 		post = True
 	else :
@@ -49,6 +61,8 @@ def main():
 
 @app.route('/list',methods=["GET","POST"])
 def list():
+	if not session.get('logged_in'):
+		return redirect(url_for('index'))
 	if request.method == 'POST':
 		post = True
 
@@ -81,6 +95,8 @@ def list():
 
 @app.route('/social',methods=["GET","POST"])
 def social():
+	if not session.get('logged_in'):
+		return redirect(url_for('index'))
 	if request.method == 'POST':
 		post = True
 	else :
@@ -105,6 +121,8 @@ def social():
 
 @app.route('/group',methods=["GET","POST"])
 def group():
+	if not session.get('logged_in'):
+		return redirect(url_for('index'))
 	if request.method == 'POST':
 		post = True
 	else :
@@ -145,7 +163,7 @@ def musicstream ():
 
 	music1 = Session.query(music).filter(music.id==data['id']).one()
 	origin = os.getcwd() + "/WebMusicPlayer/static/music/" + music1.filename[1:-4] +".flv"
-	#time hash : hashlib.md5(str(datetime.datetime.today())).hexdigest()
+	#time hash : hashlib.md5(str(datetime.today())).hexdigest()
 	flvfile = hashlib.md5(str(datetime.today())).hexdigest() + ".flv"
 	link = "/tmp/flvs/" + flvfile
 
