@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
-from sqlalchemy import create_engine, Column, Integer, String
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
+from sqlalchemy.orm import sessionmaker, scoped_session, relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -40,6 +40,7 @@ class music (Base):
 	filename = Column(Integer)
 
 
+
 	def __repr__(self):
 		return "<music ('%s')>" %(self.id)
 
@@ -57,3 +58,25 @@ class user (Base):
 
 	def __repr__(self):
 		return "<user ('%s')>" %(self.name)
+
+class playlist (Base):
+	__tablename__ = 'playlist'
+	id = Column(Integer, primary_key=True)
+	name = Column(String)
+	userid = Column(Integer)
+
+
+	def __repr__(self):
+		return "<playlist ('%s')>" %(self.name)
+
+
+class playlist_item(Base):
+	__tablename__ = 'playlist_item'
+	id = Column(Integer, primary_key=True)
+	listid = Column(Integer)
+	musicid = Column(Integer, ForeignKey('music.id'))
+	music = relationship("music")
+	order = Column(Integer)
+
+	def __repr__(self):
+		return "<playlist_item ('%s')>" %(self.id)

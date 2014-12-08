@@ -76,3 +76,9 @@ body { padding-top: 70px; }
 #volume-slider .slider-selection {
   background: #BABABA;
 }
+
+
+.listname{
+    text-align: center;
+
+}

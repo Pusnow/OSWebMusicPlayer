@@ -14,42 +14,19 @@
 <div class ="container">
 <h3> Playlist </h3>
     <ul>
-    <li><a id = "curlist">현재 재생중인 음악</a></li>
+    <li><a class = "menulist" data-id = "curlist" data-name="재생중인 음악">재생중인 음악</a></li>
   {%for list in playlist%}
-    <li>{{list.name}}</li>
+    <li><a class = "menulist" data-id = "{{list.id}}" data-name="{{list.name}}">{{list.name}}</a></li>
   {%endfor%}
     </ul>
   </div>
   </div>
   </div>
 <div class="col-md-10">
-<div class="panel panel-default">
-<table class="table table-striped table-hover">
-  <thead>
-   <tr>
-    <th>#</th>
-    <th>제목</th>
-    <th>가수</th>
-    <th>시간</th>
-  </tr>
-</thead>
-<tbody>
-{% set num = 1 %}
-
-{% for music in musiclist %}
-<tr>
-  <td>{{num}}</td>
-  <td>{{ music.name }}</td>
-  <td>{{ music.singer }}</td>
-  <td>{{ music.length }}</td>
-</tr>
-{% set num = num + 1%}
-
-{%endfor%}
-</tbody>
-
-</table>
+<div class="panel panel-default" id = "listarea">
+<h2 class ='listname'>좌측에서 리스트를 선택하세요.</h2>
 </div>
+
 </div>
 </div>
 {% endblock %}

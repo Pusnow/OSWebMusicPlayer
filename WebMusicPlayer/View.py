@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 from WebMusicPlayer import app
 from flask import render_template,request,jsonify, session, flash, redirect, url_for
-from database import Session, music, album, user
+from database import Session, music, album, user, playlist,playlist_item
 import os
 import subprocess
 import hashlib
@@ -68,28 +68,13 @@ def list():
 
 	else :
 		post = False
-	musiclist1 = [
-	dict(name=u"끼이익",singer=u"이성원", length = 123),
-	dict(name=u"test",singer=u"test1", length = 123),
-	dict(name=u"test",singer=u"test1", length = 123),
-	dict(name=u"test",singer=u"test1", length = 123),
-	dict(name=u"test",singer=u"test1", length = 123),
-	dict(name=u"test",singer=u"test1", length = 123),
-	dict(name=u"test",singer=u"test1", length = 123),
-	dict(name=u"test",singer=u"test1", length = 123),
-	dict(name=u"test",singer=u"test1", length = 123),
-	dict(name=u"test",singer=u"test1", length = 123)
-	]
-	playlist1 = [
-		dict(name=u"좋아하는 음악"),
-		dict(name=u"싫어하는 음악"),
-		dict(name=u"어중간 음악")
 
 
-	]
+	playlist1 = Session.query(playlist).filter(playlist.userid==session['userid']).all() 
 
 
-	return render_template('list_view.html', musiclist = musiclist1, playlist = playlist1, post=post)
+
+	return render_template('list_view.html', playlist = playlist1, post=post)
 
 
 
@@ -178,3 +163,21 @@ def musicstream ():
 	
 	
 	return jsonify(json_data)
+
+
+
+@app.route('/getlist', methods=['POST'])
+def getlist():
+	data = request.get_json()
+	item = Session.query(playlist_item).filter(playlist_item.listid==data['id']).order_by(playlist_item.order).all()
+	json_data = dict(id = data['id'])
+	musiclist = []
+	print item
+	for m in item:
+		musiclist.append(m.music.diction())
+
+	json_data ["musiclist"]  =musiclist
+	print json_data
+	return jsonify(json_data)
+
+

@@ -21,7 +21,7 @@ function playbyid(id){
 			console.log(data.flv);
 			$("#play").removeClass('glyphicon-play').addClass('glyphicon-pause');
 			if (!isSet){
-				set("rtmp://os.pusnow.com/vod/")
+				set("rtmp://165.132.149.58/vod/")
 				isSet=true;
 			}
 			start(data.flv);
@@ -43,6 +43,13 @@ function playbyid(id){
 
 
 };
+function timeformat(time){
+
+	if (time%60 > 10)
+		return Math.floor(time/60)+':'+time%60
+	else
+		return Math.floor(time/60)+':0'+time%60
+}
 
 function streamFinish() {
 	//call by Flash
@@ -211,7 +218,7 @@ function albummodal (albumid){
 				modal += '<td>'+data.musiclist[musicid].num+'</td>'
                 modal += '<td>'+data.musiclist[musicid].name+'</td>'
                 modal += '<td>'+data.musiclist[musicid].singer+'</td>'
-                modal += '<td>'+Math.floor(data.musiclist[musicid].length/60)+':'+data.musiclist[musicid].length%60+'</td>'
+                modal += '<td>'+timeformat(data.musiclist[musicid].length)+'</td>'
                 modal += '</tr>'
 
 			}
@@ -247,3 +254,62 @@ function setPlaylistAlbum (albumid){
 	});
 
 }
+
+
+$(".block-body").on("click",".menulist",function(e){
+	e.preventDefault();
+	var id =  $(this).data("id");
+	console.log(id)
+	var musiclist = [];
+	if (id == "curlist"){
+
+		musiclist = playlist.playlist;
+
+
+	}
+	else {
+		var json_data = {};
+		json_data["id"]=id;
+
+		$.ajax({
+			type: "POST",
+			contentType: "application/json; charset=utf-8",
+			url: $SCRIPT_ROOT + "/getlist",
+			async: false, 
+			data: JSON.stringify(json_data),
+			success: function (data) {
+				musiclist = data.musiclist;
+				
+				
+			},
+			dataType: "json"
+		});
+		
+	}
+	console.log(musiclist)
+	var list = "";
+	list +=  "<h2 class ='listname'>" +  $(this).data("name") + "</h2>";
+	if (musiclist.length != 0){
+	
+	list +='<table class="table table-striped table-hover"><thead><tr><th>#</th><th>제목</th><th>가수</th><th>시간</th></tr></thead>'
+	list +='<tbody>'
+
+	for (var musicid in  musiclist){
+		list += '<tr class="musiclist" data-id="'+ musiclist[musicid].id+'" data-albumid="'+musiclist[musicid].albumid+'"data-num='+ musiclist[musicid].num+'>'
+		list += '<td>'+ (parseInt(musicid)+1)+'</td>'
+        list += '<td>'+ musiclist[musicid].name+'</td>'
+        list += '<td>'+ musiclist[musicid].singer+'</td>'
+        list += '<td>'+timeformat(data.musiclist[musicid].length)+'</td>'
+        list += '</tr>'
+	}
+
+	list += '</tbody> </table>'
+	}
+	else {
+		list += "<h3 class = 'listname'> 리스트에 음악이 없습니다. </h3>"
+	}
+
+
+	$("#listarea").empty().append(list);
+	
+} );
