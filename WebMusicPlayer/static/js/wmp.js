@@ -53,7 +53,8 @@ function timeformat(time){
 
 function streamFinish() {
 	//call by Flash
-	playnext();
+	if (isPlay)
+		playnext();
 }
 
 
@@ -122,13 +123,20 @@ $("body").on("click",".musiclist",function(e){
 	var id = $(this).data("id");
 	var albumid = $(this).data("albumid");
 	var num = $(this).data("num");
-	setPlaylistAlbum(albumid);
-	playbyid(id);
-	
+
+	switch ($(this).data("type")){
+		case "album" : setPlaylistAlbum(albumid); break;
+		case "list" : if ($(this).data("list")!="curlist") setPlaylistList($(this).data("list")); break;
+
+
+	}
 	for (var musicid in playlist.playlist){
 			if (playlist.playlist[musicid].id == id)
 				playlist.current=parseInt(musicid);
 	}
+	playbyid(id);
+	
+	
 
 	
 
@@ -214,7 +222,7 @@ function albummodal (albumid){
 			modal +='<tbody>'
 
 			for (var musicid in data.musiclist){
-				modal += '<tr class="musiclist" data-id="'+data.musiclist[musicid].id+'" data-albumid="'+albumid+'"data-num='+data.musiclist[musicid].num+'>'
+				modal += '<tr class="musiclist" data-id="'+data.musiclist[musicid].id+'" data-albumid="'+albumid+'"data-num='+data.musiclist[musicid].num+' data-type="album">'
 				modal += '<td>'+data.musiclist[musicid].num+'</td>'
                 modal += '<td>'+data.musiclist[musicid].name+'</td>'
                 modal += '<td>'+data.musiclist[musicid].singer+'</td>'
@@ -244,6 +252,25 @@ function setPlaylistAlbum (albumid){
 		type: "POST",
 		contentType: "application/json; charset=utf-8",
 		url: $SCRIPT_ROOT + "/albuminfo",
+		data: JSON.stringify(json_data),
+		success: function (data) {
+			console.log(data);
+			playlist.playlist = data.musiclist;
+			//playlist.current = num;
+		},
+		dataType: "json"
+	});
+
+}
+
+function setPlaylistList (listid){
+	var json_data = {};
+	json_data["id"]=listid;
+
+	$.ajax({
+		type: "POST",
+		contentType: "application/json; charset=utf-8",
+		url: $SCRIPT_ROOT + "/getlist",
 		data: JSON.stringify(json_data),
 		success: function (data) {
 			console.log(data);
@@ -295,11 +322,11 @@ $(".block-body").on("click",".menulist",function(e){
 	list +='<tbody>'
 
 	for (var musicid in  musiclist){
-		list += '<tr class="musiclist" data-id="'+ musiclist[musicid].id+'" data-albumid="'+musiclist[musicid].albumid+'"data-num='+ musiclist[musicid].num+'>'
+		list += '<tr class="musiclist" data-id="'+ musiclist[musicid].id+'" data-albumid="'+musiclist[musicid].albumid+'"data-num='+ musiclist[musicid].num+' data-type="list" data-list='+id+'>'
 		list += '<td>'+ (parseInt(musicid)+1)+'</td>'
         list += '<td>'+ musiclist[musicid].name+'</td>'
         list += '<td>'+ musiclist[musicid].singer+'</td>'
-        list += '<td>'+timeformat(data.musiclist[musicid].length)+'</td>'
+        list += '<td>'+timeformat(musiclist[musicid].length)+'</td>'
         list += '</tr>'
 	}
 
