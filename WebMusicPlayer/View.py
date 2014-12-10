@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 from WebMusicPlayer import app
 from flask import render_template,request,jsonify, session, flash, redirect, url_for
-from database import Session, music, album, user, playlist,playlist_item
+from database import Session, music, album, user, playlist,playlist_item, feed
 import os
 import subprocess
 import hashlib
@@ -21,12 +21,16 @@ def shutdown_session(exception=None):
 def index():
 	if session.get('logged_in'):
 		return redirect(url_for('main'))
-	return render_template('login.html')
+
+	new = Session.query(music).order_by(music.id.desc())[0:10]
+	most = Session.query(music).order_by(music.count.desc())[0:10]
+
+	return render_template('login.html', most=most, new = new)
 
 @app.route('/login', methods=["POST"])
 def login ():
-
-	loginuser = Session.query(user).filter(user.name==request.form['username']).all()
+	loginuser = Session.query(user).filter(user.name == request.form['username']).all()
+	print loginuser
 	if not loginuser :
 		error = 'Invalid username'
 	elif hashlib.md5(request.form['password']).hexdigest() != loginuser[0].pw :
@@ -35,11 +39,17 @@ def login ():
 			session['logged_in'] = True
 			session['userid'] = loginuser[0].id
 			session['username'] = loginuser[0].name
+			session['realname'] = loginuser[0].realname
 			#flash('You were logged in')
 			return redirect(url_for('main'))
 	print error
-	return render_template('login.html')
+	return redirect(url_for('index'))
 
+
+@app.route('/logout')
+def logout():
+	session.pop('logged_in', None)
+	return redirect(url_for('index'))
 
 
 @app.route('/main', methods=["GET","POST"])
@@ -53,8 +63,6 @@ def main():
 
 
 	albumlist1 = Session.query(album).order_by(album.id).all()
-	for a in albumlist1 :
-		print a.name+".jpg"
 
 	return render_template('album_view.html', albumlist=albumlist1, post=post)
 
@@ -91,18 +99,31 @@ def social():
 		dict(name=u"한승훈 주식회사")
 	]
 
-	user1 = dict(name=u"이성원", grouplist = group1)
+	user1 = dict(name=session['realname'] , grouplist = group1)
 
-	feedlist1 = [
-		dict(user = u"한승훈", text =u"한승훈님이 he india me to SBTM! 를 듣고 있습니다."),
-		dict(user = u"이성재", text =u"이성재님이 노래방달렷더니힘드네 를 듣고 있습니다.")
+	feedlist = Session.query(feed).filter(feed.userid==session['userid']).order_by(feed.id.desc()).all()
 
+	return render_template('social.html', user = user1, feedlist = feedlist, post=post)
 
-
+@app.route('/user/<id>',methods=["GET","POST"])
+def usersocial(id):
+	user1 = Session.query(user).filter(user.id == id).first()
+	if request.method == 'POST':
+		post = True
+	else :
+		post = False
+	group1 = [
+		dict(name=u"어린이 합창단"),
+		dict(name=u"한승훈 주식회사")
 	]
 
+	
 
-	return render_template('social.html', user = user1, feedlist = feedlist1, post=post)
+	feedlist = Session.query(feed).filter(feed.userid==id).order_by(feed.id.desc()).all()
+	user1 = dict(name=user1.realname, grouplist = group1)
+	return render_template('social.html', user = user1, feedlist = feedlist, post=post)
+
+
 
 @app.route('/group',methods=["GET","POST"])
 def group():
@@ -151,12 +172,14 @@ def musicstream ():
 	#time hash : hashlib.md5(str(datetime.today())).hexdigest()
 	flvfile = unicode(session['userid']) +"_"+hashlib.md5(str(datetime.today())).hexdigest() + ".flv"
 	link = "/tmp/flvs/" + flvfile
-	print flvfile
 
 	if os.path.isfile(origin):
 		#subprocess.call(["rm /tmp/flvs/"+ unicode(session['userid']) +"_*.flv"],shell=True)
 		subprocess.call(["ln","-s",origin,link])
 		json_data = dict (flv = flvfile)
+		Session.query(music).filter(music.id==data['id']).update({"count": music1.count+1})
+		Session.add(feed(title=session['realname'],text =(session['realname'] + u"님이 "+music1.name+u"을 들었습니다."), userid=session['userid']))
+		Session.commit()
 	else :
 		json_data = dict (flv = "")
 		print "File Not Found : " + origin
@@ -176,7 +199,7 @@ def getlist():
 	for m in item:
 		musiclist.append(m.music.diction())
 
-	json_data ["musiclist"]  =musiclist
+	json_data ["musiclist"] =musiclist
 	print json_data
 	return jsonify(json_data)
 

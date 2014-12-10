@@ -8,6 +8,7 @@ var playlist={
 };
 
 
+
 function playbyid(id){
 	var json_data = {};
 	json_data["id"]=id;
@@ -22,6 +23,7 @@ function playbyid(id){
 			$("#play").removeClass('glyphicon-play').addClass('glyphicon-pause');
 			if (!isSet){
 				set("rtmp://165.132.149.58/vod/")
+				setInterval(setprogress, 1000);
 				isSet=true;
 			}
 			start(data.flv);
@@ -340,3 +342,10 @@ $(".block-body").on("click",".menulist",function(e){
 	$("#listarea").empty().append(list);
 	
 } );
+
+function setprogress(){
+	if (isPlay){
+		$("#musicprogress").css("width",gettime()/playlist.playlist[playlist.current].length*100);
+	}
+
+}

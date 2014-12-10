@@ -27,7 +27,11 @@
 <div class="panel panel-default ">
   <div class="panel-heading">새로운 음악</div>
   <div class="panel-body">
-    노래방달렷더니힘드네 - 이성재
+    <ol>
+    {% for m in new %}
+    <li> {{m.name}} - {{m.singer}} </li>
+     {% endfor %}
+     </ol>
   </div>
 </div>
 </div>
@@ -43,7 +47,11 @@
 <div class="panel panel-default">
   <div class="panel-heading">음악 인기 순위</div>
   <div class="panel-body">
-    he india me to SBTM! - 한승훈
+    <ol>
+    {% for m in most %}
+    <li> {{m.name}} - {{m.singer}} </li>
+     {% endfor %}
+     </ol>
   </div>
 </div>
 </div>

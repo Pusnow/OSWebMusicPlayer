@@ -38,7 +38,7 @@ class music (Base):
 	genre = Column(String)
 	year = Column(Integer)
 	filename = Column(Integer)
-
+	count = Column(Integer)
 
 
 	def __repr__(self):
@@ -48,13 +48,12 @@ class music (Base):
 		return dict(id=self.id,albumid=self.albumid,albumname=self.albumname,num=self.num,name=self.name,singer=self.singer,length=self.length,genre=self.genre,year=self.year)
 
 
-
 class user (Base):
 	__tablename__ = 'user'
 	id = Column(Integer, primary_key=True)
 	name = Column(String)
+	realname = Column(String)
 	pw = Column(String)
-
 
 	def __repr__(self):
 		return "<user ('%s')>" %(self.name)
@@ -80,3 +79,15 @@ class playlist_item(Base):
 
 	def __repr__(self):
 		return "<playlist_item ('%s')>" %(self.id)
+
+
+class feed(Base):
+	__tablename__ = 'feed'
+	id = Column(Integer, primary_key=True, autoincrement = True)
+	userid = Column(Integer, ForeignKey('user.id'))
+	user = relationship("user")
+	title = Column(String)
+	text = Column(String)
+
+	def __repr__(self):
+		return "<feed ('%s')>" %(self.title)

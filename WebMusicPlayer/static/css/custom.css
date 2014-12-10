@@ -13,6 +13,28 @@ body { padding-top: 70px; }
   height:100%;
 }
 
+.navbar-cr
+{
+    position: absolute;
+    right: 0;
+    top: 0;
+    text-align: right;
+    margin: auto;
+  height:100%;
+}
+
+
+.pbar {
+  margin-left: auto;
+  margin-right: auto;
+  vertical-align:bottom;
+  height:10%;
+  width : 300px;
+
+}
+
+
+
 
 .navbar-player {
   float: none;

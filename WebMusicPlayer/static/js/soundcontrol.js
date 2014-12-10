@@ -16,6 +16,14 @@ function stop(){
 	$("#rtmpplay").get(0).stop();
 }
 
+function seek(sec){
+	$("#rtmpplay").get(0).seek(sec);
+}
+
+function gettime(){
+	return $("#rtmpplay").get(0).gettime();
+}
+
 var flashvars = {};
 var params = {};
 var attributes = {};
