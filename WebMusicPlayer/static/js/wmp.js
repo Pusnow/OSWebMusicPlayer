@@ -189,6 +189,28 @@ $("#play").on("click",function(e){
 
 } );
 
+
+$("#player-star").on("click",function(e){
+	var json_data = {};
+	json_data["id"]=playlist.playlist[playlist.current].id;
+
+	$.ajax({
+		type: "POST",
+		contentType: "application/json; charset=utf-8",
+		url: $SCRIPT_ROOT + "/addfav",
+		data: JSON.stringify(json_data),
+		success: function (data) {
+			//playlist.current = num;
+		},
+		dataType: "json"
+	});
+	
+	
+
+} );
+
+
+
 $("#back").on("click",function(e){
 	playprev();
 	
@@ -218,6 +240,30 @@ $(".block-body").on("click","a#menu",function(e){
 		success: function(data){
 			$('.block-body').empty();
 			$('.block-body').append(data);
+		}
+	});
+
+
+});
+
+$(".block-body").on("click","a.dellistitem",function(e){
+	e.preventDefault();
+	e.stopPropagation();
+	var json_data = {};
+	var delitem = $(this)
+	json_data["order"]=parseInt($(this).data("order"));
+	json_data["listid"]=parseInt($(this).data("list"));
+	$.ajax({
+		type: "POST",
+		data: JSON.stringify(json_data),
+		contentType: "application/json; charset=utf-8",
+		url: $SCRIPT_ROOT + "/dellistitem",
+		success: function(data){
+
+
+			console.log($(this).closest("tr").html())
+			delitem.closest("tr").remove();
+
 		}
 	});
 
@@ -313,58 +359,84 @@ function setPlaylistList (listid){
 $(".block-body").on("click",".menulist",function(e){
 	e.preventDefault();
 	var id =  $(this).data("id");
+	var name = $(this).data("name");
 	console.log(id)
 	var musiclist = [];
 	if (id == "curlist"){
 
 		musiclist = playlist.playlist;
+		var list = "";
+		list +=  "<h2 class ='listname'>" +  $(this).data("name") + "</h2>";
+		if (musiclist.length != 0){
 
+			list +='<table class="table table-striped table-hover"><thead><tr><th>#</th><th>제목</th><th>가수</th><th>시간</th></tr></thead>'
+			list +='<tbody>'
+
+			for (var musicid in  musiclist){
+				list += '<tr class="musiclist" data-id="'+ musiclist[musicid].id+'" data-albumid="'+musiclist[musicid].albumid+'"data-num='+ musiclist[musicid].num+' data-type="list" data-list='+id+'>'
+				list += '<td>'+ (parseInt(musicid)+1)+'</td>'
+				list += '<td>'+ musiclist[musicid].name+'</td>'
+				list += '<td>'+ musiclist[musicid].singer+'</td>'
+				list += '<td>'+timeformat(musiclist[musicid].length)+'</td>'
+				list += '</tr>'
+			}
+
+			list += '</tbody> </table>'
+		}
+		else {
+			list += "<h3 class = 'listname'> 리스트에 음악이 없습니다. </h3>"
+		}
+
+
+		$("#listarea").empty().append(list);
 
 	}
 	else {
 		var json_data = {};
 		json_data["id"]=id;
+		json_data["name"]=name;
+
+
 
 		$.ajax({
 			type: "POST",
 			contentType: "application/json; charset=utf-8",
 			url: $SCRIPT_ROOT + "/getlist",
-			async: false, 
 			data: JSON.stringify(json_data),
 			success: function (data) {
 				musiclist = data.musiclist;
-				
+				var list = "";
+				list +=  "<h2 class ='listname'>" +  data.name + "</h2>";
+				if (musiclist.length != 0){
+
+					list +='<table class="table table-striped table-hover"><thead><tr><th>#</th><th>제목</th><th>가수</th><th>시간</th><th></th></tr></thead>'
+					list +='<tbody>'
+
+					for (var musicid in  musiclist){
+						list += '<tr class="musiclist" data-id="'+ musiclist[musicid].id+'" data-albumid="'+musiclist[musicid].albumid+'"data-num='+ musiclist[musicid].num+' data-type="list" data-list='+id+' data-order='+musiclist[musicid].order+'>'
+						list += '<td>'+ (parseInt(musicid)+1)+'</td>'
+						list += '<td>'+ musiclist[musicid].name+'</td>'
+						list += '<td>'+ musiclist[musicid].singer+'</td>'
+						list += '<td>'+timeformat(musiclist[musicid].length)+'</td>'
+						list += '<td><a class ="dellistitem" data-list='+id+' data-order='+musiclist[musicid].order+'>삭제</a></td>'
+						list += '</tr>'
+					}
+
+					list += '</tbody> </table>'
+				}
+				else {
+					list += "<h3 class = 'listname'> 리스트에 음악이 없습니다. </h3>"
+				}
+
+
+				$("#listarea").empty().append(list);
 				
 			},
 			dataType: "json"
 		});
 		
 	}
-	console.log(musiclist)
-	var list = "";
-	list +=  "<h2 class ='listname'>" +  $(this).data("name") + "</h2>";
-	if (musiclist.length != 0){
 	
-	list +='<table class="table table-striped table-hover"><thead><tr><th>#</th><th>제목</th><th>가수</th><th>시간</th></tr></thead>'
-	list +='<tbody>'
-
-	for (var musicid in  musiclist){
-		list += '<tr class="musiclist" data-id="'+ musiclist[musicid].id+'" data-albumid="'+musiclist[musicid].albumid+'"data-num='+ musiclist[musicid].num+' data-type="list" data-list='+id+'>'
-		list += '<td>'+ (parseInt(musicid)+1)+'</td>'
-        list += '<td>'+ musiclist[musicid].name+'</td>'
-        list += '<td>'+ musiclist[musicid].singer+'</td>'
-        list += '<td>'+timeformat(musiclist[musicid].length)+'</td>'
-        list += '</tr>'
-	}
-
-	list += '</tbody> </table>'
-	}
-	else {
-		list += "<h3 class = 'listname'> 리스트에 음악이 없습니다. </h3>"
-	}
-
-
-	$("#listarea").empty().append(list);
 	
 } );
 

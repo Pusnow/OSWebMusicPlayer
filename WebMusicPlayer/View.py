@@ -6,6 +6,7 @@ import os
 import subprocess
 import hashlib
 from datetime import datetime
+from sqlalchemy.sql import func
 
 app.config.update(dict(
 	SECRET_KEY = hashlib.md5(str(datetime.today())).hexdigest()
@@ -168,7 +169,7 @@ def musicstream ():
 	data = request.get_json()
 
 	music1 = Session.query(music).filter(music.id==data['id']).one()
-	origin = os.getcwd() + "/WebMusicPlayer/static/music/" + music1.filename[1:-4] +".flv"
+	origin = os.getcwd() + "/WebMusicPlayer/static/music/" + music1.filename[:-4] +".flv"
 	#time hash : hashlib.md5(str(datetime.today())).hexdigest()
 	flvfile = unicode(session['userid']) +"_"+hashlib.md5(str(datetime.today())).hexdigest() + ".flv"
 	link = "/tmp/flvs/" + flvfile
@@ -187,6 +188,25 @@ def musicstream ():
 	
 	return jsonify(json_data)
 
+@app.route('/addfav', methods=['POST'])
+def addfav():
+	data = request.get_json()
+	playlist1 = Session.query(playlist).filter(playlist.userid==session['userid']).order_by(playlist.id).first()
+	maxorder = Session.query(func.max(playlist_item.order)).filter(playlist_item.listid == playlist1.id).first()[0]
+	if not maxorder:
+		maxorder = 0
+	Session.add(playlist_item(listid=playlist1.id, musicid=data['id'], order=maxorder+1))
+	Session.commit()
+	return "Success"
+
+@app.route('/dellistitem', methods=['POST'])
+def dellistitem():
+	data = request.get_json()
+	Session.query(playlist_item).filter(playlist_item.order == data['order']).filter(playlist_item.listid==data['listid']).delete()
+	Session.commit()
+	return "Success"
+
+
 
 
 @app.route('/getlist', methods=['POST'])
@@ -195,12 +215,13 @@ def getlist():
 	item = Session.query(playlist_item).filter(playlist_item.listid==data['id']).order_by(playlist_item.order).all()
 	json_data = dict(id = data['id'])
 	musiclist = []
-	print item
 	for m in item:
-		musiclist.append(m.music.diction())
-
+		mm = m.music.diction()
+		mm["order"] = m.order
+		musiclist.append(mm)
+		
+	json_data ["name"] = Session.query(playlist.name).filter(playlist.id==data['id']).first()
 	json_data ["musiclist"] =musiclist
-	print json_data
 	return jsonify(json_data)
 
 
