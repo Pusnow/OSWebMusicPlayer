@@ -1,3 +1,5 @@
+//자바스크립트로 플래시(스트리밍 플레이어, rtmpplay.swf)를 제어하기 위한 코드
+
 
 function set(server){
 	console.log($("#rtmpplay").get(0));

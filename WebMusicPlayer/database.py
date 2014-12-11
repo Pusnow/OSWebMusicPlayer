@@ -1,4 +1,5 @@
 #-*- coding: utf-8 -*-
+#데이터베이스 설정 코드 및 데이터베이스 스키마 (구조) 맵핑 코
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import sessionmaker, scoped_session, relationship, backref
 from sqlalchemy.ext.declarative import declarative_base

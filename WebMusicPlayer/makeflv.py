@@ -1,4 +1,5 @@
-#-*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-드
+#폴더를 돌면서 음악 파일을 flv 파일로 인코딩하는 코드
 import os
 import commands
 

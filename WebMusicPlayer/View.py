@@ -1,4 +1,5 @@
-#-*- coding:utf-8 -*-
+#-*- coding:utf-8 -*-드
+#웹 요청 처리 코드, 대부분의 서버 프로그래밍 코드
 from WebMusicPlayer import app
 from flask import render_template,request,jsonify, session, flash, redirect, url_for
 from database import Session, music, album, user, playlist,playlist_item, feed

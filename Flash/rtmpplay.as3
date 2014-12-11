@@ -1,0 +1,136 @@
+//이 파일은 rtmpplay.fla 의 액션 스크랍트 부분만 추출한 것, 실제로 이 코드를 컴파일 하지는 않는다. 실제로는 fla 파일에서 컴파일한다. 
+
+import flash.net.NetConnection;
+import flash.net.NetStream;
+import flash.events.NetStatusEvent;
+import flash.events.Event;
+import flash.external.ExternalInterface;
+
+
+var isSet_:Boolean = false;
+var isPlaying_:Boolean = false;
+var nc: NetConnection = new NetConnection();
+var ns:NetStream;
+var pt:Number=0;
+var filename:String;
+
+
+ExternalInterface.addCallback("set_", setServer);
+ExternalInterface.addCallback("start", beginStream);
+ExternalInterface.addCallback("play", playStream);
+ExternalInterface.addCallback("pause", pauseStream);
+ExternalInterface.addCallback("stop", stopStream);
+ExternalInterface.addCallback("seek", seeksec);
+ExternalInterface.addCallback("gettime", gettime);
+ExternalInterface.addCallback("setvolume", setvolume);
+
+
+function setServer(srv:String):void{
+	nc.connect(srv);
+	nc.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
+	isSet_ = true;
+}
+
+
+
+function netStatusHandler(e:NetStatusEvent):void {
+	//traceField.text = e.info.code + "\n" + traceField.text;
+	trace(e.info.code);
+	
+	switch(e.info.code){
+		case "NetStream.Buffer.Flush":
+			streamFinish();
+			break;
+		case "NetConnection.Connect.Success":
+			break;
+		case "NetConnection.Connect.Rejected":
+			break;
+		case "NetStream.Play.Start":
+			break;
+		case "NetStream.Play.StreamNotFound":
+			trace("Can’t find the stream");
+			break;
+	}
+}
+
+
+function beginStream(stream:String):void {
+	if (!isSet_){
+		return;
+		
+	}
+	if (isPlaying_)
+		stopStream();
+	filename = stream;
+	ns = new NetStream(nc);
+	ns.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
+	//ns.client={onMetaData:function(obj:Object):void{} }
+	ns.play(stream,0);
+	isPlaying_ = true;
+
+}
+
+
+function playStream():void {
+	if (!isSet_){
+		return;
+		
+	}
+	//beginStream(filename);
+	ns.play(filename,pt);
+	isPlaying_ = true;
+}
+
+function pauseStream():void {
+	if (!isSet_){
+		return;
+		
+	}
+	pt = ns.time;
+	//stopStream();
+	ns.close();
+}
+
+function stopStream():void {
+	if (!isSet_){
+		return;
+		
+	}
+	
+	isPlaying_ = false;
+	ns.close();
+	//timeField.text = "stopped";
+}
+
+function seeksec(sec:Number):void {
+	if (!isSet_){
+		return;
+		
+	}
+	//beginStream(filename);
+	ns.seek(sec);
+}
+
+
+function gettime():Number {
+	if (!isSet_){
+		return 0;
+	}
+	return ns.time;
+	
+}
+
+function setvolume(vol:Number):void {
+	if (!isSet_){
+		return ;
+	}
+	if (ns != null) {
+      var trans:SoundTransform = new SoundTransform(vol);
+      ns.soundTransform = trans;
+    }
+	
+}
+
+function streamFinish():void {
+	ExternalInterface.call("streamFinish");
+}

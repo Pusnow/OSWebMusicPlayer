@@ -1,3 +1,6 @@
+//대부분의 플레이어 기능 구현 (클라이언트), 페이지이동, AJAX 등등
+
+
 var isSet = false;
 var isPlay = true;
 
