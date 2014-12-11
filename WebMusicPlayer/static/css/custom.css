@@ -28,16 +28,22 @@ body { padding-top: 70px; }
   margin-left: auto;
   margin-right: auto;
   vertical-align:bottom;
-  height:10%;
+  height:30%;
   width : 300px;
+  margin-top: 3px; 
+  z-index: 2;
 
 }
 
-
+.glyphicon{
+  z-index: 1;
+}
 
 
 .navbar-player {
   float: none;
+  z-index: 1;
+  padding-bottom: 0;
   }
 
 @import "bootstrap";

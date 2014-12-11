@@ -23,7 +23,7 @@ function playbyid(id){
 			$("#play").removeClass('glyphicon-play').addClass('glyphicon-pause');
 			if (!isSet){
 				set("rtmp://165.132.149.58/vod/")
-				setInterval(setprogress, 1000);
+				setInterval(setprogress, 500);
 				isSet=true;
 			}
 			start(data.flv);
@@ -47,7 +47,7 @@ function playbyid(id){
 };
 function timeformat(time){
 
-	if (time%60 > 10)
+	if (time%60 > 9)
 		return Math.floor(time/60)+':'+time%60
 	else
 		return Math.floor(time/60)+':0'+time%60
@@ -345,7 +345,28 @@ $(".block-body").on("click",".menulist",function(e){
 
 function setprogress(){
 	if (isPlay){
-		$("#musicprogress").css("width",gettime()/playlist.playlist[playlist.current].length*100);
+		$("#musicprogress").css("width",gettime()/playlist.playlist[playlist.current].length*100+'%');
 	}
 
 }
+$(".pbar").hover(function(){
+	$(".pbar").css("height","50%");
+
+}, function(){
+
+	$(".pbar").css("height","10%");
+});
+
+
+$(".pbar").on("click",function(e){
+	if (!isPlay){
+		play();
+        $("#play").removeClass('glyphicon-play').addClass('glyphicon-pause');
+		isPlay=true;
+	}
+	if(e.pageX > $(window).width()/2 -150 && e.pageX < $(window).width()/2 +150){
+		seek((e.pageX - $(window).width()/2 + 150 )*playlist.playlist[playlist.current].length/300);
+
+	}
+
+});
