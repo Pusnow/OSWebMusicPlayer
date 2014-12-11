@@ -23,6 +23,9 @@ function seek(sec){
 function gettime(){
 	return $("#rtmpplay").get(0).gettime();
 }
+function setvolume(vol){
+	return $("#rtmpplay").get(0).setvolume(vol);
+}
 
 var flashvars = {};
 var params = {};

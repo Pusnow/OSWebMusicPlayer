@@ -3,12 +3,36 @@ var isPlay = true;
 
 var playlist={
 	current : 0,
-	playlist : []
+	playlist : [],
+	volume : 0.5
 
 };
 
 
+$("#player-volume").popover({
+	placement : 'bottom', // top, bottom, left or right
+	html: 'true', 
+	tabindex: "-1",
+	content : '<input type="text" class="volumeslider" value="" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="0.5" data-slider-orientation="vertical" data-slider-selection="after" data-slider-tooltip="hide">'
 
+});
+$('#player-volume').on('shown.bs.popover', function () {
+	console.log("aaa");
+	sli = $(".volumeslider").slider();
+	sli.slider('setValue', 1-playlist.volume)
+	sli.on('slide', function(ev){
+		playlist.volume=1-$(".volumeslider").slider("getValue");
+		setvolume(playlist.volume);
+  	});
+});
+
+/*
+$('#player-volume').click(function(){
+	$('#popoverContent').slider();
+    var $target = $('#popoverContent');
+    $target.toggle(!$target.is(':visible'));
+});
+*/
 function playbyid(id){
 	var json_data = {};
 	json_data["id"]=id;
@@ -28,6 +52,7 @@ function playbyid(id){
 			}
 			start(data.flv);
 			isPlay=true;
+			setvolume(playlist.volume);
 			
 			//$("#playtable").empty().append(playlisttable());
 			$("#player-list").popover('destroy');
