@@ -55,6 +55,7 @@ class user (Base):
 	name = Column(String)
 	realname = Column(String)
 	pw = Column(String)
+	profileurl = Column(String)
 
 	def __repr__(self):
 		return "<user ('%s')>" %(self.name)

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Flask 웹 서버 시작을 위한 코드
+# Flask 웹 서버 시작을 위한 코
 
 from flask import Flask
 app = Flask(__name__)

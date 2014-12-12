@@ -1,3 +1,4 @@
+<!-- 그룹 뷰 구조 디자인-->
 {%if not post %}{% extends "default_layout.html" %}{% endif %}
 {% block body %}
 
@@ -12,8 +13,8 @@
 <div class ="container">
 <div class="col-md-3"> 
   <div class = "container profile">
-  <img src = "{{ url_for('static', filename='img/album/testalbum.png') }}">
-  <h2>{{group.name}}</h2>
+  <img src = "{{ grouppic }}">
+  <h2>{{group.name}}</h2> 
   </div>
   <div class = "container">
   <h3> 주요 멤버 </h3>
@@ -29,18 +30,6 @@
 
 <div class="col-md-9">
 
-<h2>작품</h2>
-{% for album in albumlist %}
-        <div class="album">
-          <a href = "#{{album.name}}" data-toggle="modal">
-            <img class = "albumimg" src ="{{ url_for('static', filename='img/album/testalbum.png') }}">
-            </img>
-            </a>
-            <p class = "albumtext">
-              {{album.name}} <br>{{album.singer}}
-            </p>
-        </div>
-{%endfor%}
 
 <h2>최근 활동</h2>
 

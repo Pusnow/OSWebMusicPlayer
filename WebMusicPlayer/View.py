@@ -42,6 +42,7 @@ def login ():
 			session['userid'] = loginuser[0].id
 			session['username'] = loginuser[0].name
 			session['realname'] = loginuser[0].realname
+			session['profile'] = loginuser[0].profileurl
 			#flash('You were logged in')
 			return redirect(url_for('main'))
 	print error
@@ -96,12 +97,9 @@ def social():
 		post = True
 	else :
 		post = False
-	group1 = [
-		dict(name=u"어린이 합창단"),
-		dict(name=u"한승훈 주식회사")
-	]
 
-	user1 = dict(name=session['realname'] , grouplist = group1)
+
+	user1 = dict(name=session['realname'], profileurl = session['profile'])
 
 	feedlist = Session.query(feed).filter(feed.userid==session['userid']).order_by(feed.id.desc()).all()
 
@@ -115,42 +113,52 @@ def usersocial(id):
 	else :
 		post = False
 	group1 = [
-		dict(name=u"어린이 합창단"),
-		dict(name=u"한승훈 주식회사")
+		dict(name=u"애픽하이"),
+
 	]
 
 	
 
 	feedlist = Session.query(feed).filter(feed.userid==id).order_by(feed.id.desc()).all()
-	user1 = dict(name=user1.realname, grouplist = group1)
+	user1 = dict(name=user1.realname, grouplist = group1, profileurl = session['profile'])
 	return render_template('social.html', user = user1, feedlist = feedlist, post=post)
 
 
 
-@app.route('/group',methods=["GET","POST"])
-def group():
+@app.route('/group/epic',methods=["GET","POST"])
+def groupepic():
 	if not session.get('logged_in'):
 		return redirect(url_for('index'))
 	if request.method == 'POST':
 		post = True
 	else :
 		post = False
-	memlist = [u"이성원",u"이성원 클론 1",u"이성원 클론 2 ",u"이성원 클론 3",u"이성원 클론 4"]
-	group1 = dict (name=u"어린이 합창단", memberlist = memlist)
-	albumlist1 = [
-	dict(name=u"끼이익",singer=u"이성원"),
-	dict(name=u"test",singer=u"test1"),
-	dict(name=u"test",singer=u"test1"),
-	
+	memlist = [u"타블로",u"미쓰라 진",u"DJ 투컷"]
+	group1 = dict (name=u"에픽하이", memberlist = memlist)
+	feedlist1 = [dict(user= "2014.12.10", text = u'tvN "택시" 출연'),
+				dict(user= "2014.11.05", text = u'전국투어 콘서트 "PARADE 2014" 개최'),
+				dict(user= "2014.10.21", text = u'8집 신발장 앨범 발매'),
+	dict(user= "2014.10.18", text = u'BORN HATER 뮤비 공개')
 	]
+
+	return render_template('group.html', group = group1, feedlist = feedlist1, post=post,grouppic = "/static/img/profile/epic.jpg")
+
+@app.route('/group/artist',methods=["GET","POST"])
+def groupartist():
+	if not session.get('logged_in'):
+		return redirect(url_for('index'))
+	if request.method == 'POST':
+		post = True
+	else :
+		post = False
+	memlist = [u"이상훈", u"계속 모집중"]
+	group1 = dict (name=u"Artist", memberlist = memlist)
+
 	feedlist1 = [
-		dict(user = u"이성원", text =u"연세대학교 공학관 A 에서 성공적인 공연을 하였습니다."),
-		dict(user = u"이성원 클론1", text =u"신촌 문화의 거리에서 성공적인 공연을 하였습니다.")
+		dict(user = u"2014.12.02", text =u"동아리 모집 공고  Artist http://ee.yonsei.ac.kr/bbs/board.php?bo_table=notice_1&wr_id=95")
 	]
 
-
-
-	return render_template('group.html', group = group1,albumlist=albumlist1, feedlist = feedlist1, post=post)
+	return render_template('group.html', group = group1, feedlist = feedlist1, post=post,grouppic = "/static/img/profile/artist.jpg")
 
 
 @app.route('/albuminfo', methods=['POST'])
